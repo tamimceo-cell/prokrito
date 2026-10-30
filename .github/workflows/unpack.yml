@@ -1,0 +1,25 @@
+# এককালীন: রিপোতে আপলোড করা prokrito.zip খুলে ভেতরের ফাইলগুলো বসিয়ে দেয়।
+# zip না থাকলে কিছুই করে না। কাজ শেষে এই ফাইলটা মুছে দিলেও চলে।
+name: unpack-zip
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unpack
+        run: |
+          if [ -f prokrito.zip ]; then
+            unzip -o -q prokrito.zip -d .
+            git rm -q --cached prokrito.zip
+            rm prokrito.zip
+            git config user.name "Tamim"
+            git config user.email "tamim.acca19@gmail.com"
+            git add -A
+            git commit -q -m "Prokrito — নতুন সাইটের কোড"
+            git push
+          fi

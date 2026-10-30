@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+
+/* রং site.ts → tailwind.config.ts থেকে আসে, তাই এখানে হেক্স কোড লেখা নেই */
+body { @apply bg-cream text-ink; }
+
+/*
+ * এগুলো @layer components-এর ভেতরে থাকতেই হবে।
+ *
+ * বাইরে লেখা থাকলে Tailwind এদের CSS বসায় utilities-এর পরে, আর একই
+ * specificity হওয়ায় পরেরটাই জেতে। ফলে <button class="btn-cta px-2 py-2">
+ * লিখলেও px-2/py-2 কাজ করত না — .btn-এর px-6/py-3 টিকে থাকত। শপ পেইজের
+ * কার্ডে বাটনের ভেতরে ২৪px করে প্যাডিং বসে লেখার জায়গা থাকত মাত্র ২৯px,
+ * তাই "অর্ডার করুন" তিন লাইনে ভেঙে যেত।
+ *
+ * @layer components-এ থাকলে Tailwind এদের utilities-এর আগে বসায়,
+ * তখন ক্লাস দিয়ে ওভাররাইড করা যায় — যেমনটা হওয়ার কথা।
+ */
+@layer components {
+  .btn        { @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-display font-bold transition active:translate-y-px; }
+  .btn-cta    { @apply btn bg-brand text-white shadow-[0_6px_16px_-6px_rgba(0,74,173,.45)] hover:bg-brand-deep; }
+  .btn-out    { @apply btn border-2 border-line text-ink hover:border-brand hover:text-brand; }
+  .card       { @apply flex flex-col overflow-hidden rounded-2xl border border-line bg-white transition hover:shadow-lg; }
+  .sec-title  { @apply text-center font-display text-2xl font-extrabold sm:text-3xl; }
+  .rule       { @apply mx-auto my-3 h-[3px] w-14 rounded bg-gold; }
+  .field      { @apply w-full rounded-lg border-2 border-line bg-cream px-4 py-3 outline-none transition focus:border-brand focus:bg-white; }
+}
+
+/* ল্যান্ডিং পেইজের অর্ডার বোতাম — হালকা দোলা, চোখ টানে। Tailwind-এর pulse
+   স্বচ্ছতা কমায়, তাতে বোতামটা বন্ধ (disabled) মনে হতো। */
+@keyframes nudge { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.045); } }
+.animate-nudge { animation: nudge 2.2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .animate-nudge { animation: none; } }
+
+/* ---------------------------------------------------------------------
+ *  পুরনো ল্যান্ডিং পেইজের হাতে লেখা HTML (LandingBlocks → 'html')
+ *
+ *  ওগুলো WordPress-এ বানানো, যেখানে Tailwind-এর রিসেট ছিল না — শিরোনাম
+ *  মোটা, তালিকায় বুলেট, বোতামে ব্রাউজারের ধাঁচ। রিসেট থাকলে লেখা চুপসে
+ *  যেত। তাই ভেতরের সবকিছু ব্রাউজারের ডিফল্টে ফেরানো; পেইজের নিজের CSS
+ *  যা বলে সেটাই জেতে (:where = শূন্য স্পেসিফিসিটি)।
+ *  SVG বাদ — ওদের width/fill অ্যাট্রিবিউটও "revert"-এ মুছে যেত।
+ * ------------------------------------------------------------------- */
+:where(.lp-html) :where(*:not(svg, svg *)) { all: revert; }
+:where(.lp-html) :where(*, *::before, *::after) { box-sizing: border-box; }
+:where(.lp-html) img { max-width: 100%; height: auto; }
+.lp-html { font-family: inherit; color: inherit; line-height: 1.5; }
+/* WordPress-এর Hello থিমের মতোই — বোতাম আর ঘরে পাতার ফন্ট */
+:where(.lp-html) :where(button, input, select, textarea) { font-family: inherit; font-size: 1rem; line-height: 1.5; }
