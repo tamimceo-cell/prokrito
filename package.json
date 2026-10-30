@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prebuild": "node scripts/embed-schema.mjs",
+    "predev": "node scripts/embed-schema.mjs"
   },
   "dependencies": {
     "next": "15.5.25",

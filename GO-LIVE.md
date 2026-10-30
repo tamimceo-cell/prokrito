@@ -4,8 +4,8 @@
 টেস্ট ঠিকানায় (`new.prokrito.com`) চলবে; সব মিললে তবেই ডোমেইন বদল।
 
 ## ১. ডাটাবেস (Hostinger → prokrito.com → Databases)
-- [ ] MySQL Databases → নতুন ডাটাবেস + নতুন ইউজার + শক্ত পাসওয়ার্ড
-- [ ] phpMyAdmin → সেই ডাটাবেস → **Import** → `db/schema.sql`
+- [x] MySQL Databases → নতুন ডাটাবেস + নতুন ইউজার + শক্ত পাসওয়ার্ড
+- টেবিল বানাতে কিছু করতে হবে না — `/admin/setup`-এ প্রথম অ্যাডমিন বানানোর সময় অ্যাপ নিজেই বানায়
 
 ## ২. Meta
 - [ ] Events Manager → পিক্সেল `1403169921223046` → Settings → Conversions API → **Generate access token**

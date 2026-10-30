@@ -498,3 +498,16 @@ const instance: Db = {
 
 /** কোডের সব জায়গায় এটাই — getDb().from('orders')… */
 export const getDb = (): Db => instance;
+
+/**
+ * টেবিলগুলো না থাকলে বানানো — প্রথম অ্যাডমিন সেটআপের সময় চলে।
+ * schema.sql-এর সব কমান্ড "না থাকলে বানাও" ধরনের, তাই বারবার চালালেও ক্ষতি নেই।
+ */
+export async function ensureSchema(): Promise<number> {
+  const { SCHEMA_SQL } = await import('./schema.generated');
+  const statements = SCHEMA_SQL
+    .split('\n').filter((l) => !l.trim().startsWith('--')).join('\n')
+    .split(/;\s*(?:\n|$)/).map((s) => s.trim()).filter(Boolean);
+  for (const s of statements) await getPool().query(s);
+  return statements.length;
+}

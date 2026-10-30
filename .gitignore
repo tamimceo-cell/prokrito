@@ -5,3 +5,4 @@ node_modules
 .DS_Store
 *.log
 tsconfig.tsbuildinfo
+src/lib/schema.generated.ts
