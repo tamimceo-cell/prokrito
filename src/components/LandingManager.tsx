@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { bn, tk } from '@/lib/money';
 import type { Tier, ExtraField } from '@/lib/landing';
+import { youtubeId } from '@/lib/youtube';
 
 interface Row {
   id?: string; slug: string; product_id: string | null; title: string;
@@ -72,6 +73,10 @@ function Editor({ row, products, onClose, onSaved }: {
 }) {
   const [r, setR] = useState<Row>(row);
   const [blocks, setBlocks] = useState(JSON.stringify(row.blocks, null, 2));
+  // ভিডিওর লিংক আলাদা ঘরে — নইলে বড় নকশার পেইজে (html ব্লক) JSON-এর ভেতর
+  // খুঁজে বসাতে হতো, যা অ্যাডমিনের পক্ষে প্রায় অসম্ভব
+  const firstVideo = (row.blocks as { t?: string; url?: string }[]).find((b) => b?.t === 'video');
+  const [video, setVideo] = useState(firstVideo?.url || '');
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
   const set = (patch: Partial<Row>) => setR((x) => ({ ...x, ...patch }));
@@ -85,6 +90,18 @@ function Editor({ row, products, onClose, onSaved }: {
     setErr('');
     let parsed: unknown;
     try { parsed = JSON.parse(blocks); } catch { setErr('পেইজের অংশ (JSON) ঠিক নেই — কমা বা ব্র্যাকেট দেখুন।'); return; }
+    const url = video.trim();
+    if (url && !youtubeId(url)) { setErr('ভিডিওর লিংকটা ইউটিউবের নয় বা ঠিক নেই — ইউটিউবে "Share" চেপে লিংক কপি করুন।'); return; }
+    if (Array.isArray(parsed)) {
+      const list = parsed as { t?: string; url?: string }[];
+      const v = list.find((b) => b?.t === 'video');
+      if (v) v.url = url;
+      else if (url) {
+        // ভিডিওর ব্লক না থাকলে ফর্মের আগে বসাই (ফর্ম না থাকলে শেষে)
+        const at = list.findIndex((b) => b?.t === 'order');
+        list.splice(at < 0 ? list.length : at, 0, { t: 'video', url });
+      }
+    }
     setBusy(true);
     const landing = { ...r, blocks: parsed };
     const res = await fetch('/api/landing', {
@@ -139,6 +156,14 @@ function Editor({ row, products, onClose, onSaved }: {
         <button onClick={() => set({ tiers: [...r.tiers, { qty: (r.tiers.at(-1)?.qty || 0) + 1, price: 0 }] })}
           className="mt-2 text-sm font-semibold text-brand">+ অফার যোগ করুন</button>
         <p className="mt-1 text-xs text-ink-3">দাম = ওই কয়টার মোট দাম (যেমন ২টা ৯৫০), প্রতি পিসের নয়।</p>
+
+        <div className="mt-5">
+          <L label="ইউটিউব ভিডিওর লিংক (ঐচ্ছিক)">
+            <input className="field" value={video} onChange={(e) => setVideo(e.target.value)}
+              placeholder="https://youtu.be/…" inputMode="url" />
+          </L>
+          <p className="mt-1 text-xs text-ink-3">ইউটিউবে ভিডিওর নিচে Share চেপে লিংক কপি করে এখানে বসান। ফাঁকা রাখলে পেইজে ভিডিও দেখাবে না।</p>
+        </div>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           <L label="ফর্মের শিরোনাম (ঐচ্ছিক)"><input className="field" value={r.form_title || ''} onChange={(e) => set({ form_title: e.target.value })} /></L>
