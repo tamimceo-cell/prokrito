@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getProducts, getCombos } from '@/lib/catalog';
 import ProductCard from '@/components/ProductCard';
+import HeroTape from '@/components/HeroTape';
 import { bn, tk } from '@/lib/money';
 import { site } from '@/config/site';
 
@@ -22,6 +23,9 @@ export default async function Home() {
   return (
     <>
       {/* ---------- হিরো ---------- */}
+      {site.home.heroStyle === 'tape' ? (
+        <HeroTape product={products.find((p) => p.code === site.home.heroProduct) || products[0]} from={from} />
+      ) : (
       <section className="mx-auto max-w-6xl px-4 pb-9 pt-6">
         <div className="grid items-center gap-7 rounded-3xl border border-line bg-[radial-gradient(118%_128%_at_86%_16%,rgba(199,154,46,.22),transparent_56%),radial-gradient(92%_120%_at_6%_94%,rgba(168,56,107,.16),transparent_58%),linear-gradient(135deg,#FFFDFA,#FBF3F6_56%,#F6ECF1)] p-7 sm:p-9 lg:grid-cols-[1.15fr_.85fr]">
           <div>
@@ -60,9 +64,10 @@ export default async function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ---------- ট্রাস্ট ---------- */}
-      <section className="mx-auto max-w-6xl px-4">
+      <section className={`mx-auto max-w-6xl px-4 ${site.home.heroStyle === 'tape' ? 'pt-8' : ''}`}>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {site.home.trust.map(([i, t, s]) => (
             <div key={t} className="flex items-center gap-3 rounded-2xl border border-line bg-white p-4">

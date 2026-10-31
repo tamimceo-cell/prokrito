@@ -53,3 +53,8 @@ body { @apply bg-cream text-ink; }
 .lp-html { font-family: inherit; color: inherit; line-height: 1.5; }
 /* WordPress-এর Hello থিমের মতোই — বোতাম আর ঘরে পাতার ফন্ট */
 :where(.lp-html) :where(button, input, select, textarea) { font-family: inherit; font-size: 1rem; line-height: 1.5; }
+
+/* হিরোর মাপের ফিতা — পাতা খুললে একবার বাঁ দিক থেকে গড়িয়ে আসে */
+@keyframes tape-in { from { transform: translateX(-100%) rotate(-1.5deg); } to { transform: translateX(0) rotate(-1.5deg); } }
+.hero-tape { animation: tape-in .9s cubic-bezier(.2,.8,.2,1) .15s both; }
+@media (prefers-reduced-motion: reduce) { .hero-tape { animation: none; } }

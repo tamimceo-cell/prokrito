@@ -98,6 +98,17 @@ interface Contact {
 interface Shipping { inside: number; outside: number }
 
 interface HomeContent {
+  /**
+   * হিরোর ধরন। 'collage' — চারটে প্রোডাক্টের ছবি (টেমপ্লেটের ডিফল্ট)।
+   * 'tape' — খিলান-আয়নায় একটা প্রোডাক্ট + নিচে সাইজের ফিতা (ইনারওয়্যারের দোকানের জন্য)।
+   */
+  heroStyle?: 'collage' | 'tape';
+  /** 'tape' হিরোর আয়নায় কোন প্রোডাক্ট (কোড) */
+  heroProduct?: string;
+  /** ফিতায় লেখা সাইজগুলো */
+  tapeSizes?: string[];
+  /** ফিতার নিচের এক লাইন */
+  tapeNote?: string;
   heroBadge: string;
   heroTitle: string;
   /** শিরোনামের যে অংশটা ব্র্যান্ড রঙে আলাদা দেখাবে */
@@ -193,12 +204,16 @@ export const site: SiteConfig = {
   shipping: { inside: 70, outside: 120 },
 
   home: {
-    heroBadge: '✨ আরামদায়ক ও অরিজিনাল',
-    heroTitle: 'নারীদের ইনারওয়্যারে ',
-    heroAccent: 'আরাম ও আস্থা',
+    heroStyle: 'tape',
+    heroProduct: 'PK-02',
+    tapeSizes: ['৩০', '৩২', '৩৪', '৩৬', '৩৮', '৪০', '৪২', '৪৪', '৪৬'],
+    tapeNote: 'কোন সাইজ নেবেন বুঝতে পারছেন না? অর্ডার দিন, আমরা ফোন করে মিলিয়ে দেব।',
+    heroBadge: 'ফোম ছাড়া, নরম কাপড়ের ব্রা',
+    heroTitle: 'সারাদিন আরাম, ঠিক আপনার মাপে',
+    heroAccent: '',
     heroTail: '',
     heroSub:
-      'ব্রা, শেপওয়্যার, বাচ্চাদের পোশাক — পণ্য হাতে পেয়ে, দেখে তারপর টাকা দিন।',
+      'ব্রা, শেপওয়্যার আর বাচ্চাদের পোশাক। পণ্য হাতে পেয়ে, দেখে, তারপর টাকা দিন।',
     chips: ['ক্যাশ অন ডেলিভারি', 'অগ্রিম টাকা লাগে না', 'সারা দেশে ডেলিভারি'],
     trust: [
       ['🚚', 'ক্যাশ অন ডেলিভারি', 'পণ্য হাতে পেয়ে টাকা দিন'],
