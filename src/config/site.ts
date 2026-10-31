@@ -119,7 +119,7 @@ export const site: SiteConfig = {
   tagline: 'Trusted quality and service',
   domain: 'prokrito.com',
   description:
-    'আরামদায়ক ও অরিজিনাল নারীদের ইনারওয়্যার, শেপওয়্যার ও বাচ্চাদের পোশাক — সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।',
+    'আরামদায়ক ও অরিজিনাল নারীদের ইনারওয়্যার, শেপওয়্যার, বাচ্চাদের পোশাক ও দরকারি গ্যাজেট — সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।',
 
   // পুরনো সাইটের লোগো — সার্ভারের MEDIA_DIR-এ নতুন করে এনকোড করে রাখা
   logo: '/media/brand/cropped-website-black.webp',
@@ -155,6 +155,7 @@ export const site: SiteConfig = {
     { key: 'ladies-inner', label: 'লেডিস ইনার' },
     { key: 'shapewear', label: 'শেপওয়্যার' },
     { key: 'baby', label: 'বাচ্চাদের পোশাক' },
+    { key: 'gadget', label: 'গ্যাজেট' },
   ],
 
   /* সাইজ ও কালার ফর্মের ঘরে লেখা হয়, কল সেন্টার ফোনে নিশ্চিত করে —
