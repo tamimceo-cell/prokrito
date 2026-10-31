@@ -63,8 +63,8 @@ export default function HeroTape({ product, from }: { product?: Product; from: n
         <div className="relative -mt-6 pb-8">
           <div className="hero-tape -mx-4 -rotate-[1.5deg] shadow-[0_8px_20px_-12px_rgba(0,0,0,.35)]">
             <div className="flex h-[68px] items-end justify-between gap-6 overflow-hidden bg-[#F2C14E] px-6 pb-2.5 [background-image:repeating-linear-gradient(90deg,rgba(43,43,43,.55)_0_1px,transparent_1px_12px),repeating-linear-gradient(90deg,rgba(43,43,43,.8)_0_2px,transparent_2px_60px)] [background-size:100%_12px,100%_22px] [background-repeat:repeat-x] sm:justify-center sm:gap-14">
-              {[...sizes, ...sizes].map((s, i) => (
-                <span key={i} className={`font-display text-lg font-extrabold leading-none text-[#2B2B2B] tabular-nums ${i >= sizes.length ? 'hidden 2xl:inline' : ''}`}>{s}</span>
+              {sizes.map((s) => (
+                <span key={s} className="font-display text-lg font-extrabold leading-none text-[#2B2B2B] tabular-nums">{s}</span>
               ))}
             </div>
           </div>
