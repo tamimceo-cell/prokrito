@@ -8,18 +8,25 @@ import type { Product } from './types';
  *  ইচ্ছে করেই অল্প কয়েকটা ধরন: এতেই পুরনো সব পেইজ বানানো গেছে, আর
  *  কম ধরন মানে অ্যাডমিন থেকে ভুল করার সুযোগও কম।
  * ------------------------------------------------------------------- */
-export type Img = { src: string; w: number; h: number; alt?: string; caption?: string };
+/** maxw — ছবির সর্বোচ্চ চওড়া (px), যেমন পুরনো পেইজের ছোট লোগো */
+export type Img = { src: string; w: number; h: number; alt?: string; caption?: string; maxw?: number };
 
 export type Block =
-  | { t: 'heading'; text: string; size?: 'xl' | 'lg' | 'md' }
-  | { t: 'text'; text: string }
+  /*
+   * color/bg/fg/icon — পুরনো Elementor পেইজের নিজের রং (সবুজ পটভূমি, হলুদ
+   * বোতাম …)। না দিলে দোকানের রং। পুরনো পেইজের চেহারা যেন না বদলায়।
+   */
+  | { t: 'heading'; text: string; size?: 'xl' | 'lg' | 'md'; color?: string }
+  | { t: 'text'; text: string; color?: string }
   | { t: 'image'; img: Img }
   | { t: 'gallery'; images: Img[]; cols?: 1 | 2 | 3 }
   | { t: 'video'; url: string }
-  | { t: 'list'; title?: string; items: string[] }
+  | { t: 'list'; title?: string; items: string[]; color?: string; icon?: string }
   | { t: 'features'; title?: string; items: { title: string; desc?: string }[] }
   | { t: 'compare'; title?: string; bad: { title: string; items: string[] }; good: { title: string; items: string[] } }
-  | { t: 'cta'; text?: string }
+  | { t: 'cta'; text?: string; bg?: string; fg?: string }
+  /** রঙিন পটভূমির অংশ — ভেতরে আরও ব্লক (পুরনো পেইজের সবুজ "হিরো" ইত্যাদি) */
+  | { t: 'section'; bg?: string; blocks: Block[] }
   /**
    * পুরনো পেইজের নিজের HTML/CSS/JS হুবহু — নতুন ডিজাইনের পেইজগুলো
    * (front-button-bra, net-floral-bra-new) Elementor-এর HTML উইজেটে হাতে
