@@ -52,6 +52,16 @@ WordPress আর নতুন অ্যাপ একই সার্ভারে
 থেকে বোতাম চাপলে বসে। দুবার চালালেও ডুপ্লিকেট হয় না। WooCommerce-এর
 "completed" → এখানে "confirmed" (ডেলিভার্ড নিশ্চিত নয় বলে)।
 
+## এখন কী অবস্থায় আছে
+
+- **৩১ অক্টোবর ২০২৬ থেকে নতুন সাইট `prokrito.com`-এ লাইভ।** পুরনো WordPress
+  সরানো হয়েছে `old.prokrito.com`-এ (ব্যাকআপ হিসেবে; ডাটাবেস ডাম্প
+  `/home/u914342140/pk-export/wp-backup/`)। WordPress-এর siteurl এখনো prokrito.com,
+  তাই old.prokrito.com খুললে নতুন সাইটে চলে আসে — ইচ্ছাকৃত, হাত দেবেন না।
+- লাইভে যাচাই: ৯টা ল্যান্ডিং + ৯টা ধন্যবাদ পাতা (`/product/<slug>/`) 200, পিক্সেল ও
+  `/api/track` (CAPI) চলে। FB_TEST_EVENT_CODE মুছে ফেলা।
+- বাকি: Pathao-র env (PATHAO_*) বসানো হয়নি।
+
 ## যা মনে রাখতে হবে
 
 - পুরনো WordPress **হ্যাক হয়েছিল** (Hello Elementor-এ "panox1" ম্যালওয়্যার, এপ্রিল
