@@ -137,7 +137,7 @@ export default function OrdersTable({ orders, courier = 'steadfast', courierStat
                       #{bn(o.order_no)}
                     </button>
                     <div className="text-xs text-ink-3">
-                      {new Date(o.created_at).toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' })}
+                      {new Date(o.created_at).toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short', timeZone: 'Asia/Dhaka' })}
                     </div>
                     {o.is_flagged && (
                       <div className="mt-1 inline-block rounded-full bg-warn/15 px-2 py-0.5 text-[11px] font-semibold text-warn">

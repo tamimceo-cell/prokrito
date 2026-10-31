@@ -185,7 +185,9 @@ export async function sendToMeta(events: unknown[]): Promise<SendResult> {
       signal: AbortSignal.timeout(8000),
     });
     const json = await res.json().catch(() => null);
-    return { ok: res.ok, status: res.status, body: json };
+    // Meta ভুলের কারণ body-তে পাঠায় — অ্যাডমিনের "পিক্সেল ইভেন্ট" পাতায় যেন দেখা যায়
+    const err = !res.ok ? (json as any)?.error?.message || `HTTP ${res.status}` : undefined;
+    return { ok: res.ok, status: res.status, body: json, error: err };
   } catch (e) {
     return { ok: false, status: 0, body: null, error: (e as Error).message };
   }

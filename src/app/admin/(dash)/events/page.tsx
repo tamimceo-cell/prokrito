@@ -36,7 +36,7 @@ export default async function EventsPage() {
             {(rows || []).map((r: any) => (
               <tr key={r.id} className="border-b border-line/60">
                 <td className="p-3 text-xs text-ink-3">
-                  {new Date(r.created_at).toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' })}
+                  {new Date(r.created_at).toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short', timeZone: 'Asia/Dhaka' })}
                 </td>
                 <td className="p-3 font-medium">{r.event_name}</td>
                 <td className="p-3 font-mono text-[11px] text-ink-3">{String(r.event_id).slice(0, 13)}…</td>
