@@ -1,4 +1,7 @@
 @tailwind base;
+
+/* ফন্টের নাম — ফাইলগুলো layout.tsx-এ @fontsource থেকে */
+:root { --font-display: 'Baloo Da 2'; --font-body: 'Hind Siliguri'; }
 @tailwind components;
 @tailwind utilities;
 

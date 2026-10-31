@@ -11,10 +11,12 @@
     "predev": "node scripts/embed-schema.mjs"
   },
   "dependencies": {
+    "@fontsource/baloo-da-2": "^5.3.0",
+    "@fontsource/hind-siliguri": "^5.3.0",
+    "mysql2": "^3.11.3",
     "next": "15.5.25",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "mysql2": "^3.11.3",
     "server-only": "^0.0.1"
   },
   "devDependencies": {

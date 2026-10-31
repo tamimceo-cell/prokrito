@@ -1,17 +1,27 @@
 import type { Metadata } from 'next';
-import { Baloo_Da_2, Hind_Siliguri } from 'next/font/google';
+/*
+ * ফন্ট নিজের সার্ভার থেকে (@fontsource), Google Fonts থেকে নয়।
+ * কেন: next/font/google বিল্ডের সময় Google-এ যায় — Hostinger-এর বিল্ডে সেটা
+ * একবার ভেঙে গিয়েছিল ("Cannot read properties of null"), আর ডিপ্লয় আটকে
+ * গিয়েছিল। নিজের ফাইলে সেই ঝুঁকি নেই, আর ফোনেও বাড়তি ডোমেইনে যেতে হয় না।
+ * শুধু বাংলা আর ল্যাটিন অংশ — বাকি ভাষার ফাইল ফোনে নামে না।
+ */
+import '@fontsource/baloo-da-2/bengali-500.css';
+import '@fontsource/baloo-da-2/bengali-700.css';
+import '@fontsource/baloo-da-2/bengali-800.css';
+import '@fontsource/baloo-da-2/latin-500.css';
+import '@fontsource/baloo-da-2/latin-700.css';
+import '@fontsource/baloo-da-2/latin-800.css';
+import '@fontsource/hind-siliguri/bengali-400.css';
+import '@fontsource/hind-siliguri/bengali-600.css';
+import '@fontsource/hind-siliguri/bengali-700.css';
+import '@fontsource/hind-siliguri/latin-400.css';
+import '@fontsource/hind-siliguri/latin-600.css';
+import '@fontsource/hind-siliguri/latin-700.css';
 import { site, siteUrl } from '@/config/site';
 import Housekeeping from '@/components/Housekeeping';
 import './globals.css';
 
-const display = Baloo_Da_2({
-  subsets: ['bengali', 'latin'], weight: ['500', '600', '700', '800'],
-  variable: '--font-display', display: 'swap',
-});
-const body = Hind_Siliguri({
-  subsets: ['bengali', 'latin'], weight: ['400', '500', '600', '700'],
-  variable: '--font-body', display: 'swap',
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -34,7 +44,7 @@ export const metadata: Metadata = {
  */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="bn" className={`${display.variable} ${body.variable}`}>
+    <html lang="bn">
       <body className="font-body">
         {children}
         <Housekeeping />
