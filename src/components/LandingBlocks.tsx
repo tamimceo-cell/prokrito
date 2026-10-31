@@ -52,7 +52,9 @@ export default function LandingBlocks({ blocks }: { blocks: Block[] }) {
 
           case 'list':
             return (
-              <section key={i} className="rounded-2xl border border-line bg-white p-5">
+              // পুরনো পেইজের নিজের রং থাকলে সাদা কার্ড নয় — নইলে কালো পটভূমির
+              // সাদা লেখা সাদা কার্ডে হারিয়ে যায়
+              <section key={i} className={b.color ? 'px-1 py-2' : 'rounded-2xl border border-line bg-white p-5'}>
                 {b.title && <h3 className="mb-3 text-center font-display text-lg font-extrabold">{b.title}</h3>}
                 <ul className="space-y-2.5">
                   {b.items.map((t, j) => (
