@@ -1,0 +1,76 @@
+<style>
+.ab-trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px 28px;margin-top:26px}
+.ab-trust li{display:flex;gap:12px;align-items:flex-start}
+.ab-trust .ic{flex:none;width:44px;height:44px;border-radius:14px;background:var(--pink);display:grid;place-items:center;font-size:1.3rem}
+.ab-trust b{display:block;font-size:1.05rem}
+.ab-trust span{color:var(--plum2);font-size:.96rem}
+.ab-faq{max-width:720px;margin:24px auto 0}
+.ab-faq details{border-bottom:1px solid var(--line)}
+.ab-faq summary{cursor:pointer;list-style:none;padding:16px 34px 16px 0;font-weight:700;font-size:1.05rem;position:relative}
+.ab-faq summary::-webkit-details-marker{display:none}
+.ab-faq summary::after{content:"+";position:absolute;right:4px;top:12px;font-size:1.5rem;color:var(--rose);transition:transform .2s}
+.ab-faq details[open] summary::after{transform:rotate(45deg)}
+.ab-faq details p{padding:0 0 16px;color:var(--plum2)}
+.ab-final{background:var(--plum);color:#fff;text-align:center;border-radius:28px;padding:36px 22px;margin:8px 0 0}
+.ab-final h2{color:#fff}
+.ab-final p{color:#E9DBE5;margin:8px 0 20px}
+.ab-final .ab-call{color:#fff;margin-top:16px}
+/* মোবাইলে নিচে আটকে থাকা বোতাম — ফর্ম চোখে পড়লে লুকায়; ডানে হোয়াটসঅ্যাপের জায়গা ছাড়া */
+.ab-stick{position:fixed;left:12px;right:84px;bottom:14px;z-index:40;transform:translateY(140%);transition:transform .3s ease}
+.ab-stick.show{transform:none}
+.ab-stick a{width:100%;min-height:52px;font-size:1.05rem}
+@media(min-width:860px){.ab-stick{display:none}}
+@media(prefers-reduced-motion:reduce){.ab *,.ab-stick{transition:none!important;scroll-behavior:auto}}
+</style>
+
+<div class="ab">
+  <section class="ab-sec" style="padding-top:20px">
+    <div class="ab-wrap">
+      <h2>নিশ্চিন্তে অর্ডার করুন</h2>
+      <ul class="ab-trust">
+        <li><span class="ic" aria-hidden="true">💵</span><div><b>ক্যাশ অন ডেলিভারি</b><span>পণ্য হাতে পেয়ে, দেখে তারপর টাকা দেবেন।</span></div></li>
+        <li><span class="ic" aria-hidden="true">🚚</span><div><b>সারা দেশে ডেলিভারি</b><span>ঢাকায় ২৪–৪৮ ঘণ্টা, ঢাকার বাইরে ২–৪ কার্যদিবস।</span></div></li>
+        <li><span class="ic" aria-hidden="true">🔄</span><div><b>সহজ এক্সচেঞ্জ</b><span>সাইজ বা কালার না মিললে বদলে দেওয়া হয়।</span></div></li>
+        <li><span class="ic" aria-hidden="true">📞</span><div><b>কল করে নিশ্চিত</b><span>অর্ডারের পরে আমরা ফোনে সাইজ-কালার মিলিয়ে নিই।</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="ab-sec" style="padding-top:12px">
+    <div class="ab-wrap">
+      <h2>সাধারণ জিজ্ঞাসা</h2>
+      <div class="ab-faq">
+        <details><summary>সাইজ না জানলে কী করব?</summary><p>ফর্মে সাইজের ঘর ফাঁকা রাখুন। অর্ডারের পরে আমরা কল করে আপনার মাপ শুনে সঠিক সাইজ বেছে দেব।</p></details>
+        <details><summary>ব্রেস্টফিডিংয়ের সময় পরা যাবে?</summary><p>হ্যাঁ। সামনের বাটন খুললেই বাচ্চাকে খাওয়ানো যায়, পুরো ব্রা খুলতে হয় না।</p></details>
+        <details><summary>কম্বোতে আলাদা আলাদা কালার নেওয়া যাবে?</summary><p>হ্যাঁ। প্রতিটা পিস আলাদা কালার ও সাইজে নিতে পারবেন। ফর্মে লিখে দিন, অথবা কলের সময় বলুন।</p></details>
+        <details><summary>টাকা কখন দিতে হবে?</summary><p>পণ্য হাতে পাওয়ার পরে। আগে কোনো টাকা লাগবে না।</p></details>
+        <details><summary>ডেলিভারি চার্জ কত?</summary><p>ঢাকা সিটির ভেতরে ৭০ টাকা, ঢাকার বাইরে ১২০ টাকা।</p></details>
+        <details><summary>সাইজ বা কালার না মিললে?</summary><p>আমাদের নম্বরে যোগাযোগ করুন, এক্সচেঞ্জ করে দেওয়া হবে।</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="ab-sec" style="padding-top:8px">
+    <div class="ab-wrap">
+      <div class="ab-final">
+        <h2>আজই আরামটা নিজে পরে দেখুন</h2>
+        <p>৩ পিস একসাথে নিলে ৳১,২০০, পণ্য হাতে পেয়ে টাকা</p>
+        <a class="ab-btn" href="#order-form">অর্ডার করতে চাই</a><br>
+        <a class="ab-call" href="tel:+8801715987848">কল করুন ০১৭১৫-৯৮৭৮৪৮</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="ab ab-stick" id="ab-stick" aria-hidden="true"><a class="ab-btn" href="#order-form" tabindex="-1">অর্ডার করুন, ৳৪৫০ থেকে</a></div>
+
+<script>
+(function(){
+  var bar=document.getElementById('ab-stick'), hero=document.getElementById('ab-hero'), form=document.getElementById('order-form');
+  if(!bar||!hero||!('IntersectionObserver' in window)) return;
+  var heroOut=false, formIn=false;
+  function upd(){ bar.classList.toggle('show',heroOut&&!formIn); }
+  new IntersectionObserver(function(e){heroOut=!e[0].isIntersecting;upd()}).observe(hero);
+  if(form) new IntersectionObserver(function(e){formIn=e[0].isIntersecting;upd()},{rootMargin:'0px 0px -20% 0px'}).observe(form);
+})();
+</script>

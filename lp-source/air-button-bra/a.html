@@ -1,0 +1,151 @@
+<style>
+.ab{--sky:#DCEBF7;--skin:#F6E4D2;--pink:#FADDE6;--tint:var(--skin);--plum:#3A2142;--plum2:#6B5470;--rose:#D6336C;--rose-d:#B42358;--line:#EADFE6;--paper:#FFFFFF;
+  color:var(--plum);font-family:var(--font-body),'Hind Siliguri',sans-serif;line-height:1.6;margin-top:-20px}
+.ab *{box-sizing:border-box}
+.ab img{display:block;max-width:100%;height:auto}
+.ab h1,.ab h2,.ab h3{font-family:var(--font-display),'Baloo Da 2',sans-serif;margin:0;line-height:1.2;color:var(--plum)}
+.ab p{margin:0}
+.ab ul{list-style:none;margin:0;padding:0}
+.ab-wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+.ab-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 30px;border-radius:999px;background:var(--rose);color:#fff;
+  font-family:var(--font-display),'Baloo Da 2',sans-serif;font-weight:700;font-size:1.15rem;text-decoration:none;border:0;cursor:pointer;
+  box-shadow:0 10px 24px -10px rgba(214,51,108,.7);transition:background .15s,transform .15s}
+.ab-btn:hover{background:var(--rose-d)}
+.ab-btn:active{transform:scale(.98)}
+.ab a:focus-visible,.ab button:focus-visible{outline:3px solid var(--plum);outline-offset:3px}
+.ab-call{display:inline-flex;align-items:center;gap:6px;color:var(--plum);font-weight:600;text-decoration:none;border-bottom:1.5px solid currentColor;padding-bottom:1px}
+
+/* হিরো — কালার বদলালে পটভূমির রংও বদলায়; বিন্দুর নকশা কাপড়ের ছিদ্রের মতো */
+.ab-hero{background-color:var(--tint);transition:background-color .45s ease;position:relative;overflow:hidden;padding:26px 0 34px}
+.ab-hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(58,33,66,.09) 1.6px,transparent 1.7px);background-size:14px 14px;
+  -webkit-mask-image:linear-gradient(180deg,#000 0,transparent 70%);mask-image:linear-gradient(180deg,#000 0,transparent 70%);pointer-events:none}
+.ab-hero .ab-wrap{position:relative;display:grid;gap:20px;grid-template-areas:"head" "pic" "buy"}
+.ab-head{grid-area:head}.ab-pic{grid-area:pic}.ab-buy{grid-area:buy}
+.ab-buy .ab-price{margin-top:0}
+.ab-name{display:inline-block;background:var(--paper);color:var(--rose);font-weight:700;border-radius:999px;padding:3px 14px;font-size:.95rem}
+.ab-hero h1{font-size:clamp(2rem,7.4vw,3.4rem);font-weight:800;margin-top:12px;letter-spacing:-.01em}
+.ab-lead{font-size:1.08rem;color:var(--plum2);margin-top:12px;max-width:34em}
+.ab-stage{position:relative;border-radius:28px;overflow:hidden;background:var(--paper);aspect-ratio:1/1;box-shadow:0 30px 60px -36px rgba(58,33,66,.55)}
+.ab-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s ease}
+.ab-stage img.on{opacity:1}
+.ab-sw{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.ab-sw span{font-size:.95rem;color:var(--plum2)}
+.ab-sw button{display:inline-flex;align-items:center;gap:7px;border:1.5px solid rgba(58,33,66,.18);background:rgba(255,255,255,.7);border-radius:999px;
+  padding:6px 14px 6px 6px;font:inherit;font-weight:600;color:var(--plum);cursor:pointer;transition:border-color .15s,background .15s}
+.ab-sw button i{width:24px;height:24px;border-radius:50%;border:1px solid rgba(58,33,66,.15)}
+.ab-sw button[aria-pressed="true"]{border-color:var(--plum);background:#fff}
+.ab-price{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-top:20px}
+.ab-price b{font-family:var(--font-display),'Baloo Da 2',sans-serif;font-size:2.1rem;color:var(--rose);line-height:1}
+.ab-price small{font-size:1rem;color:var(--plum2)}
+.ab-acts{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:18px}
+.ab-facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:20px;font-weight:600;font-size:.98rem}
+.ab-facts li{display:flex;align-items:center;gap:7px}
+.ab-facts svg{flex:none}
+@media(min-width:860px){
+  .ab-hero{padding:48px 0 56px}
+  .ab-hero .ab-wrap{grid-template-columns:1.05fr 1fr;grid-template-areas:"head pic" "buy pic";gap:0 48px;align-content:center}
+  .ab-head{align-self:end}.ab-buy{align-self:start;padding-top:22px}
+}
+
+/* উপকারিতা — ছবি আর লেখা পালা করে, প্রতিটা আলাদা অনুভূতি */
+.ab-sec{padding:52px 0}
+.ab-sec h2{font-size:clamp(1.6rem,5.2vw,2.3rem);font-weight:800;text-align:center}
+.ab-sub{text-align:center;color:var(--plum2);margin-top:8px}
+.ab-rows{display:grid;gap:34px;margin-top:34px}
+.ab-row{display:grid;gap:16px;align-items:center}
+.ab-row img{border-radius:24px;aspect-ratio:4/3;object-fit:cover;width:100%}
+.ab-row h3{font-size:1.45rem;font-weight:700}
+.ab-row p{margin-top:8px;color:var(--plum2);font-size:1.05rem;max-width:30em}
+@media(min-width:760px){
+  .ab-row{grid-template-columns:1fr 1fr;gap:40px}
+  .ab-row:nth-child(even) img{order:2}
+}
+.ab-vhead{padding:10px 0 0;text-align:center}
+.ab-vhead h2{font-size:clamp(1.5rem,5vw,2.1rem);font-weight:800}
+.ab-vhead p{color:var(--plum2);margin-top:6px}
+</style>
+
+<div class="ab">
+  <section class="ab-hero" id="ab-hero">
+    <div class="ab-wrap">
+      <div class="ab-head">
+        <span class="ab-name">এয়ার বাটন ব্রা</span>
+        <h1>এত আরাম, মনেই হবে না ব্রা পরে আছেন</h1>
+        <p class="ab-lead">নরম এয়ার কটনের জালিদার কাপড়ে সারাদিন বাতাস চলাচল করে, তাই ঘাম জমে না। সামনে বাটন থাকায় পরা-খোলা সহজ, ব্রেস্টফিডিংয়ের সময়ও ব্যবহার করা যায়।</p>
+      </div>
+      <div class="ab-pic">
+        <div class="ab-stage" aria-live="polite">
+          <img class="on" data-c="skin" src="{{skin-1}}" alt="স্কিন কালারের এয়ার বাটন ব্রা" width="1200" height="1200" fetchpriority="high">
+          <img data-c="sky" src="{{sky-1}}" alt="স্কাই কালারের এয়ার বাটন ব্রা" width="1200" height="1200" loading="lazy">
+          <img data-c="pink" src="{{pink-2}}" alt="পিংক কালারের এয়ার বাটন ব্রা" width="1200" height="1200" loading="lazy">
+        </div>
+        <div class="ab-sw" role="group" aria-label="কালার">
+          <span>কালার বেছে দেখুন:</span>
+          <button type="button" data-c="skin" aria-pressed="true"><i style="background:#EED3B8"></i>স্কিন</button>
+          <button type="button" data-c="sky" aria-pressed="false"><i style="background:#BCD8EE"></i>স্কাই</button>
+          <button type="button" data-c="pink" aria-pressed="false"><i style="background:#F3C3D2"></i>পিংক</button>
+        </div>
+      </div>
+
+      <div class="ab-buy">
+        <div class="ab-price"><b>৳৪৫০</b><small>১ পিস</small><small>৩ পিস একসাথে ৳১,২০০</small></div>
+        <div class="ab-acts">
+          <a class="ab-btn" href="#order-form">অর্ডার করতে চাই</a>
+          <a class="ab-call" href="tel:+8801715987848">কল করুন ০১৭১৫-৯৮৭৮৪৮</a>
+        </div>
+        <ul class="ab-facts">
+          <li><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#D6336C"/><path d="M6 10.2l2.6 2.6L14 7.4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>ফোম ও তার ছাড়া</li>
+          <li><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#D6336C"/><path d="M6 10.2l2.6 2.6L14 7.4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>সামনে বাটন</li>
+          <li><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#D6336C"/><path d="M6 10.2l2.6 2.6L14 7.4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>ক্যাশ অন ডেলিভারি</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="ab-sec">
+    <div class="ab-wrap">
+      <h2>সারাদিন যা টের পাবেন</h2>
+      <p class="ab-sub">অফিস, বাসা বা বেড়াতে যাওয়া, যেকোনো ঋতুতে</p>
+      <div class="ab-rows">
+        <div class="ab-row">
+          <img src="{{skin-2}}" alt="এয়ার বাটন ব্রার জালিদার কাপড়" width="1200" height="1200" loading="lazy">
+          <div><h3>সবসময় বাতাস চলাচল করে</h3><p>কাপড়জুড়ে ছোট ছোট ছিদ্র। গরমে, রান্নাঘরে বা ভিড়ের বাসেও শরীর থাকে শুকনো, ঘামে ভিজে চুলকানির ঝামেলা নেই।</p></div>
+        </div>
+        <div class="ab-row">
+          <img src="{{sky-2}}" alt="সামনে বাটনওয়ালা এয়ার বাটন ব্রা" width="1200" height="1200" loading="lazy">
+          <div><h3>সামনে বাটন, পেছনে হাত নিতে হয় না</h3><p>পেছনের হুক খুঁজে হাত বাঁকানোর দরকার নেই। সামনের বাটন খুলে-লাগিয়ে কয়েক সেকেন্ডেই পরা যায়। মা-খালাদের জন্যও সহজ।</p></div>
+        </div>
+        <div class="ab-row">
+          <img src="{{pink-1}}" alt="পিংক কালারের এয়ার বাটন ব্রা" width="1200" height="1200" loading="lazy">
+          <div><h3>ব্রেস্টফিডিং ব্রা হিসেবেও</h3><p>বাচ্চাকে খাওয়ানোর সময় পুরো ব্রা খুলতে হয় না, সামনের বাটন খুললেই হলো। নতুন মায়েদের জন্য ঝামেলাহীন।</p></div>
+        </div>
+        <div class="ab-row">
+          <img src="{{pink-garden}}" alt="এয়ার বাটন ব্রা" width="1200" height="1200" loading="lazy">
+          <div><h3>এত হালকা, সারাদিন পরে থাকা যায়</h3><p>ভেতরে ফোম বা তার নেই, তাই কোথাও চাপ লাগে না। নরম কাপড় শরীরের সাথে মিশে থাকে।</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ab-vhead" id="ab-vhead" hidden>
+    <div class="ab-wrap"><h2>ভিডিওতে দেখে নিন</h2><p>কাপড় আর বাটন কাছ থেকে</p></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var hero=document.getElementById('ab-hero'); if(!hero) return;
+  var tint={skin:'var(--skin)',sky:'var(--sky)',pink:'var(--pink)'};
+  var btns=hero.querySelectorAll('.ab-sw button'), imgs=hero.querySelectorAll('.ab-stage img');
+  function pick(c){
+    hero.style.setProperty('--tint',tint[c]);
+    btns.forEach(function(b){b.setAttribute('aria-pressed',b.dataset.c===c?'true':'false')});
+    imgs.forEach(function(i){i.classList.toggle('on',i.dataset.c===c)});
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){pick(b.dataset.c)})});
+  // ভিডিও বসানো থাকলে তবেই "ভিডিওতে দেখে নিন" লেখা দেখাই — ফাঁকা শিরোনাম যেন না ঝোলে
+  function vid(){ if(document.querySelector('button[aria-label="ভিডিও চালান"], iframe[src*="youtube"]')) document.getElementById('ab-vhead').hidden=false; }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',vid); else vid();
+  setTimeout(vid,1500);
+})();
+</script>

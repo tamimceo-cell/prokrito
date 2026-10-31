@@ -1,0 +1,107 @@
+<style>
+/* তুলনা — সারি ধরে দুই পাশ, এক নজরে পার্থক্য */
+.ab-cmp{margin-top:28px;border-radius:24px;overflow:hidden;border:1.5px solid var(--line);background:var(--paper)}
+.ab-cmp-h,.ab-cmp-r{display:grid;grid-template-columns:1fr 1fr}
+.ab-cmp-h div{padding:14px 16px;font-family:var(--font-display),'Baloo Da 2',sans-serif;font-weight:700;font-size:1.05rem}
+.ab-cmp-h div:first-child{background:#F3EEF1;color:var(--plum2)}
+.ab-cmp-h div:last-child{background:var(--plum);color:#fff}
+.ab-cmp-r{border-top:1px solid var(--line)}
+.ab-cmp-r div{padding:13px 16px;font-size:1rem}
+.ab-cmp-r div:first-child{color:var(--plum2);background:#FBF9FA}
+.ab-cmp-r div:last-child{font-weight:600}
+.ab-cmp-r em{display:block;font-style:normal;font-size:.82rem;color:var(--plum2);font-weight:400;margin-bottom:2px}
+
+/* কালার — ট্যাপ করলে ফর্মের কালারের ঘরে বসে যায় */
+.ab-colors{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px}
+.ab-col{appearance:none;border:2px solid transparent;background:none;padding:0;border-radius:22px;overflow:hidden;cursor:pointer;text-align:center;font:inherit;color:var(--plum)}
+.ab-col img{width:100%;aspect-ratio:3/4;object-fit:cover}
+.ab-col span{display:block;padding:9px 4px 11px;font-weight:700;font-size:1.05rem}
+.ab-col[data-c="স্কিন"] span{background:var(--skin)}
+.ab-col[data-c="স্কাই"] span{background:var(--sky)}
+.ab-col[data-c="পিংক"] span{background:var(--pink)}
+.ab-col[aria-pressed="true"]{border-color:var(--plum)}
+.ab-col[aria-pressed="true"] span::after{content:" ✓"}
+.ab-note{text-align:center;color:var(--plum2);font-size:.92rem;margin-top:12px}
+
+/* কম্বো — দাম সারি ধরে; ৩ পিসেরটা গাঢ় */
+.ab-combo{background:linear-gradient(180deg,var(--pink) 0,#fff 100%)}
+.ab-offers{display:grid;gap:12px;max-width:560px;margin:28px auto 0}
+.ab-off{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--paper);border-radius:20px;padding:16px 18px;
+  font:inherit;color:var(--plum);cursor:pointer;transition:border-color .15s}
+.ab-off:hover{border-color:var(--rose)}
+.ab-off .q{font-family:var(--font-display),'Baloo Da 2',sans-serif;font-weight:800;font-size:1.5rem;min-width:66px}
+.ab-off .d{flex:1;font-size:.95rem;color:var(--plum2)}
+.ab-off .d b{display:block;color:var(--plum);font-size:1rem}
+.ab-off .p{font-family:var(--font-display),'Baloo Da 2',sans-serif;font-weight:800;font-size:1.45rem;color:var(--rose);white-space:nowrap}
+.ab-off.best{background:var(--plum);border-color:var(--plum);color:#fff}
+.ab-off.best .d,.ab-off.best .d b{color:#F2E6EE}
+.ab-off.best .p{color:#fff}
+.ab-tag{display:inline-block;background:var(--rose);color:#fff;font-size:.8rem;font-weight:700;border-radius:999px;padding:1px 10px;margin-bottom:3px}
+.ab-center{text-align:center;margin-top:24px}
+</style>
+
+<div class="ab">
+  <section class="ab-sec">
+    <div class="ab-wrap" style="max-width:760px">
+      <h2>সাধারণ ব্রা আর এয়ার বাটন ব্রার পার্থক্য</h2>
+      <div class="ab-cmp" role="table" aria-label="তুলনা">
+        <div class="ab-cmp-h" role="row"><div role="columnheader">সাধারণ ফোমের ব্রা</div><div role="columnheader">এয়ার বাটন ব্রা</div></div>
+        <div class="ab-cmp-r" role="row"><div role="cell"><em>বাতাস</em>ফোমে ঘাম জমে থাকে</div><div role="cell"><em>বাতাস</em>জালিদার কাপড়ে সারাদিন বাতাস চলে</div></div>
+        <div class="ab-cmp-r" role="row"><div role="cell"><em>পরা-খোলা</em>পেছনের হুক, হাত বাঁকাতে হয়</div><div role="cell"><em>পরা-খোলা</em>সামনে বাটন, কয়েক সেকেন্ডের কাজ</div></div>
+        <div class="ab-cmp-r" role="row"><div role="cell"><em>ওজন</em>ফোম আর তারে ভারী</div><div role="cell"><em>ওজন</em>ফোম ও তার নেই, একদম হালকা</div></div>
+        <div class="ab-cmp-r" role="row"><div role="cell"><em>বাচ্চাকে খাওয়ানো</em>পুরোটা খুলতে হয়</div><div role="cell"><em>বাচ্চাকে খাওয়ানো</em>বাটন খুললেই হয়</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ab-sec" style="padding-top:8px">
+    <div class="ab-wrap" style="max-width:760px">
+      <h2>তিনটি কালার</h2>
+      <p class="ab-sub">পছন্দের কালারে ট্যাপ করুন, অর্ডার ফর্মে বসে যাবে</p>
+      <div class="ab-colors">
+        <button type="button" class="ab-col" data-c="স্কিন" aria-pressed="false"><img src="{{skin-3}}" alt="স্কিন কালার" width="1200" height="1200" loading="lazy"><span>স্কিন</span></button>
+        <button type="button" class="ab-col" data-c="স্কাই" aria-pressed="false"><img src="{{sky-2}}" alt="স্কাই কালার" width="1200" height="1200" loading="lazy"><span>স্কাই</span></button>
+        <button type="button" class="ab-col" data-c="পিংক" aria-pressed="false"><img src="{{pink-1}}" alt="পিংক কালার" width="1200" height="1200" loading="lazy"><span>পিংক</span></button>
+      </div>
+      <p class="ab-note">কম্বোতে প্রতিটা পিস আলাদা কালারে নেওয়া যাবে। ছবির রং স্ক্রিনভেদে একটু আলাদা লাগতে পারে।</p>
+    </div>
+  </section>
+
+  <section class="ab-sec ab-combo">
+    <div class="ab-wrap">
+      <h2>যত বেশি নেবেন, তত সাশ্রয়</h2>
+      <p class="ab-sub">ঘরের সবার জন্য বা বদলে বদলে পরার জন্য</p>
+      <div class="ab-offers">
+        <button type="button" class="ab-off" data-q="1"><span class="q">১ পিস</span><span class="d"><b>একটা দিয়ে শুরু</b>পরে দেখুন কেমন আরাম</span><span class="p">৳৪৫০</span></button>
+        <button type="button" class="ab-off" data-q="2"><span class="q">২ পিস</span><span class="d"><b>৳৫০ সাশ্রয়</b>একটা পরবেন, একটা ধোয়া থাকবে</span><span class="p">৳৮৫০</span></button>
+        <button type="button" class="ab-off best" data-q="3"><span class="q">৩ পিস</span><span class="d"><span class="ab-tag">সবচেয়ে সাশ্রয়ী</span><b>৳১৫০ সাশ্রয়</b>তিন কালারই নিয়ে নিন</span><span class="p">৳১,২০০</span></button>
+      </div>
+      <p class="ab-center"><a class="ab-btn" href="#order-form">অর্ডার করতে চাই</a></p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  function form(){ return document.getElementById('order-form'); }
+  function go(){ var f=form(); if(f) f.scrollIntoView({behavior:'smooth',block:'start'}); }
+  // কম্বো বাছলে ফর্মের অফারও বদলায় (LandingOrder 'pkPackageChange' শোনে)
+  document.querySelectorAll('.ab-off').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.dispatchEvent(new CustomEvent('pkPackageChange',{detail:{id:b.dataset.q+'pc'}}));
+      go();
+    });
+  });
+  // কালার বাছলে ফর্মের "কালার" ঘরে লেখা — কম্বোতে একাধিক কালার জুড়ে যায়
+  var picked=[];
+  document.querySelectorAll('.ab-col').forEach(function(b){
+    b.addEventListener('click',function(){
+      var c=b.dataset.c, i=picked.indexOf(c);
+      if(i>=0) picked.splice(i,1); else picked.push(c);
+      b.setAttribute('aria-pressed',i>=0?'false':'true');
+      var inp=document.getElementById('lp-x0');
+      if(inp) inp.value=picked.join(', ');
+    });
+  });
+})();
+</script>
