@@ -27,6 +27,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: `${site.name} — ${site.tagline}`, template: `%s · ${site.name}` },
   description: site.description,
+  // ফেভিকন — পুরনো WordPress-এর সাইট আইকনটাই (512×512), সার্ভারের MEDIA_DIR-এ রাখা।
+  // আগে টেমপ্লেট (সোহা শপ) থেকে আসা src/app/icon.png ছিল, তাই ভুল লোগো দেখাত।
+  icons: { icon: site.logoSm, shortcut: site.logoSm, apple: site.logoSm },
   openGraph: { type: 'website', locale: 'bn_BD', siteName: site.name },
   robots: { index: true, follow: true },
   // Meta ডোমেইন ভেরিফিকেশন — Business Settings → Brand safety → Domains
