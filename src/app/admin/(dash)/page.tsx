@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getDb } from '@/lib/db';
-import { bn, tk } from '@/lib/money';
+import { num, money } from '@/lib/money';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,10 +21,11 @@ export default async function Dashboard() {
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const weekAgo = new Date(Date.now() - 7 * 864e5);
 
-  const [todayRes, weekRes, newRes, failRes, lowRes, campRes] = await Promise.all([
+  const [todayRes, weekRes, newRes, holdRes, failRes, lowRes, campRes] = await Promise.all([
     db.from('orders').select('total, status').gte('created_at', today.toISOString()),
     db.from('orders').select('total, status').gte('created_at', weekAgo.toISOString()),
     db.from('orders').select('id', { count: 'exact', head: true }).eq('status', 'new'),
+    db.from('orders').select('id', { count: 'exact', head: true }).eq('status', 'hold'),
     db.from('capi_events').select('id', { count: 'exact', head: true }).eq('status', 'failed'),
     db.from('product_variants').select('id, stock, opt_label, color_label, products(code, name)').lte('stock', 3).order('stock'),
     db.from('campaign_stats').select('*').order('orders', { ascending: false }).limit(8),
@@ -45,47 +46,47 @@ export default async function Dashboard() {
   return (
     <div className="space-y-7">
       <div>
-        <h1 className="font-display text-2xl font-extrabold">ড্যাশবোর্ড</h1>
-        <p className="text-sm text-ink-3">আজকের অবস্থা ও গত ৭ দিনের হিসাব</p>
+        <h1 className="font-display text-2xl font-extrabold">Dashboard</h1>
+        <p className="text-sm text-ink-3">Today, and the last 7 days</p>
       </div>
 
       {failed > 0 && (
         <div className="rounded-xl2 border border-warn/40 bg-warn/10 p-4 text-sm">
-          <b className="text-warn">{bn(failed)}টি পিক্সেল ইভেন্ট Meta-তে পৌঁছায়নি।</b>{' '}
-          এগুলো না পাঠালে ওই অর্ডারগুলো অ্যাড রিপোর্টে দেখা যাবে না।{' '}
-          <Link href="/admin/events" className="font-semibold underline">দেখুন ও আবার পাঠান</Link>
+          <b className="text-warn">{num(failed)} pixel event(s) did not reach Meta.</b>{' '}
+          Until they are resent, those orders won't show in ad reports.{' '}
+          <Link href="/admin/events" className="font-semibold underline">View and resend</Link>
         </div>
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Tile label="আজকের অর্ডার" value={bn(t.length)}
-          sub={`নতুন ${bn(newRes.count ?? 0)}টি কল করা বাকি`} tone="brand" />
-        <Tile label="আজকের সম্ভাব্য টাকা" value={tk(valid(t).reduce((a, x) => a + x.total, 0))}
-          sub="বাতিল বাদে" />
-        <Tile label="কনফার্ম রেট (৭ দিন)"
-          value={confirmRate === null ? '—' : bn(confirmRate) + '%'}
-          sub="ফেক অর্ডার কতটা আসছে" tone={confirmRate !== null && confirmRate < 70 ? 'warn' : 'ok'} />
-        <Tile label="ডেলিভারি রেট (৭ দিন)"
-          value={deliveryRate === null ? '—' : bn(deliveryRate) + '%'}
-          sub={weekSettled ? `${bn(weekSettled)}টি নিষ্পত্তি হয়েছে` : 'এখনো হিসাব করার মতো ডাটা নেই'}
+        <Tile label="Orders today" value={num(t.length)}
+          sub={`${num(newRes.count ?? 0)} new to call${holdRes.count ? `, ${num(holdRes.count)} on hold` : ''}`} tone="brand" />
+        <Tile label="Expected revenue today" value={money(valid(t).reduce((a, x) => a + x.total, 0))}
+          sub="Excluding cancelled" />
+        <Tile label="Confirm rate (7 days)"
+          value={confirmRate === null ? '—' : confirmRate + '%'}
+          sub="How many orders are genuine" tone={confirmRate !== null && confirmRate < 70 ? 'warn' : 'ok'} />
+        <Tile label="Delivery rate (7 days)"
+          value={deliveryRate === null ? '—' : deliveryRate + '%'}
+          sub={weekSettled ? `${num(weekSettled)} settled` : 'Not enough data yet'}
           tone={deliveryRate !== null && deliveryRate < 60 ? 'warn' : 'ok'} />
       </div>
 
       <section className="rounded-xl2 border border-line bg-white p-5">
-        <h2 className="font-display text-lg font-bold">ক্যাম্পেইন অনুযায়ী</h2>
+        <h2 className="font-display text-lg font-bold">By campaign</h2>
         <p className="mb-4 text-sm text-ink-3">
-          কোন অ্যাডসেট থেকে অর্ডার এসে সত্যিই ডেলিভার হচ্ছে — এটাই আসল লাভের হিসাব
+          Which ad sets bring orders that actually get delivered — the real profit picture
         </p>
         {!campRes.data?.length ? (
-          <p className="py-6 text-center text-sm text-ink-3">এখনো কোনো ক্যাম্পেইন ডাটা নেই।</p>
+          <p className="py-6 text-center text-sm text-ink-3">No campaign data yet.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[620px] text-sm">
               <thead>
                 <tr className="border-b border-line text-left text-xs uppercase tracking-wide text-ink-3">
-                  <th className="pb-2">ক্যাম্পেইন</th><th className="pb-2">অ্যাডসেট</th>
-                  <th className="pb-2 text-right">অর্ডার</th><th className="pb-2 text-right">ডেলিভার্ড</th>
-                  <th className="pb-2 text-right">রিটার্ন</th><th className="pb-2 text-right">আয়</th>
+                  <th className="pb-2">Campaign</th><th className="pb-2">Ad set</th>
+                  <th className="pb-2 text-right">Orders</th><th className="pb-2 text-right">Delivered</th>
+                  <th className="pb-2 text-right">Returned</th><th className="pb-2 text-right">Revenue</th>
                 </tr>
               </thead>
               <tbody>
@@ -93,10 +94,10 @@ export default async function Dashboard() {
                   <tr key={i} className="border-b border-line/60">
                     <td className="py-2.5 font-medium">{c.campaign}</td>
                     <td className="py-2.5 text-ink-2">{c.adset}</td>
-                    <td className="py-2.5 text-right tabular-nums">{bn(c.orders)}</td>
-                    <td className="py-2.5 text-right tabular-nums text-ok">{bn(c.delivered)}</td>
-                    <td className="py-2.5 text-right tabular-nums text-warn">{bn(c.returned)}</td>
-                    <td className="py-2.5 text-right font-semibold tabular-nums">{tk(c.revenue)}</td>
+                    <td className="py-2.5 text-right tabular-nums">{num(c.orders)}</td>
+                    <td className="py-2.5 text-right tabular-nums text-ok">{num(c.delivered)}</td>
+                    <td className="py-2.5 text-right tabular-nums text-warn">{num(c.returned)}</td>
+                    <td className="py-2.5 text-right font-semibold tabular-nums">{money(c.revenue)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -106,10 +107,10 @@ export default async function Dashboard() {
       </section>
 
       <section className="rounded-xl2 border border-line bg-white p-5">
-        <h2 className="font-display text-lg font-bold">স্টক শেষের পথে</h2>
-        <p className="mb-4 text-sm text-ink-3">৩ পিস বা তার কম বাকি আছে যেগুলোর</p>
+        <h2 className="font-display text-lg font-bold">Low stock</h2>
+        <p className="mb-4 text-sm text-ink-3">Items with 3 pcs or fewer left</p>
         {!lowRes.data?.length ? (
-          <p className="py-6 text-center text-sm text-ink-3">সব জায়গায় যথেষ্ট স্টক আছে।</p>
+          <p className="py-6 text-center text-sm text-ink-3">Stock is fine everywhere.</p>
         ) : (
           <ul className="divide-y divide-line/60">
             {lowRes.data.map((v: any) => (
@@ -121,7 +122,7 @@ export default async function Dashboard() {
                   </span>
                 </span>
                 <span className={`font-semibold tabular-nums ${v.stock === 0 ? 'text-pinkc' : 'text-warn'}`}>
-                  {v.stock === 0 ? 'শেষ' : bn(v.stock) + ' পিস'}
+                  {v.stock === 0 ? 'Out of stock' : num(v.stock) + ' pcs'}
                 </span>
               </li>
             ))}

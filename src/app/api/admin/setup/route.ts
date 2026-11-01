@@ -20,22 +20,22 @@ export async function POST(req: Request) {
   try { body = await req.json(); } catch { /* নিচে */ }
   const got = String(body.token || '');
   const tokenOk = want.length >= 16 && got.length === want.length && timingSafeEqual(Buffer.from(got), Buffer.from(want));
-  if (!tokenOk) return NextResponse.json({ ok: false, error: 'সেটআপ টোকেন মিলছে না।' }, { status: 401 });
+  if (!tokenOk) return NextResponse.json({ ok: false, error: 'Setup token does not match.' }, { status: 401 });
 
   // নতুন ফাঁকা ডাটাবেস — টেবিলগুলো এখানেই বানিয়ে নিই
   try { await ensureSchema(); }
-  catch (e) { return NextResponse.json({ ok: false, error: `ডাটাবেসে টেবিল বানানো যায়নি: ${(e as Error).message}` }, { status: 500 }); }
+  catch (e) { return NextResponse.json({ ok: false, error: `Could not create database tables: ${(e as Error).message}` }, { status: 500 }); }
 
   const [{ n }] = await sql<{ n: number }>('SELECT COUNT(*) AS n FROM admin_users');
-  if (Number(n) > 0) return NextResponse.json({ ok: false, error: 'অ্যাডমিন আগেই বানানো হয়েছে।' }, { status: 409 });
+  if (Number(n) > 0) return NextResponse.json({ ok: false, error: 'An admin already exists.' }, { status: 409 });
 
   const username = String(body.username || '').trim().toLowerCase();
   const password = String(body.password || '');
   if (!/^[a-z0-9_.-]{3,32}$/.test(username)) {
-    return NextResponse.json({ ok: false, error: 'ইউজারনেম ৩-৩২ অক্ষর — ইংরেজি ছোট হাতের অক্ষর, সংখ্যা।' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'Username: 3–32 characters, lowercase English letters and numbers.' }, { status: 400 });
   }
   if (password.length < 10) {
-    return NextResponse.json({ ok: false, error: 'পাসওয়ার্ড কমপক্ষে ১০ অক্ষর।' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'Password must be at least 10 characters.' }, { status: 400 });
   }
 
   await sql('INSERT INTO admin_users (id, username, password_hash, role) VALUES (UUID(), ?, ?, ?)',

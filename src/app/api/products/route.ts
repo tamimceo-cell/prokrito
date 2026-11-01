@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   if (!admin) return NextResponse.json({ ok: false }, { status: 401 });
 
   const b = await req.json().catch(() => null);
-  if (!b?.action) return NextResponse.json({ ok: false, error: 'ভুল অনুরোধ' }, { status: 400 });
+  if (!b?.action) return NextResponse.json({ ok: false, error: 'Invalid request' }, { status: 400 });
 
   const db = getDb();
 
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       sort: Number(p.sort) || 0,
     };
     if (!row.code || !row.name || row.price <= 0) {
-      return NextResponse.json({ ok: false, error: 'কোড, নাম ও দাম দিতে হবে।' }, { status: 400 });
+      return NextResponse.json({ ok: false, error: 'Code, name and price are required.' }, { status: 400 });
     }
 
     const { data, error } = p.id
@@ -78,7 +78,7 @@ export async function POST(req: Request) {
     const ids: string[] = Array.isArray(b.variantIds) ? b.variantIds : [b.variantId];
     const delta = Number(b.delta) || 0;
     if (!ids.length || !delta) {
-      return NextResponse.json({ ok: false, error: `কোন ${site.words.optionAxis}ে কত যোগ হবে বলুন।` }, { status: 400 });
+      return NextResponse.json({ ok: false, error: 'Choose which stock slots to add to and how many.' }, { status: 400 });
     }
 
     // ডাটাবেজের ভেতরেই যোগ-বিয়োগ (adjust_stock) — পড়া আর লেখা এক ধাপে।
@@ -110,5 +110,5 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  return NextResponse.json({ ok: false, error: 'অজানা অনুরোধ' }, { status: 400 });
+  return NextResponse.json({ ok: false, error: 'Unknown request' }, { status: 400 });
 }

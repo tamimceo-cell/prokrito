@@ -29,7 +29,7 @@ export interface Order {
   id: string; order_no: number; name: string; phone: string; address: string;
   city_type: 'inside' | 'outside'; note: string | null;
   subtotal: number; shipping: number; total: number;
-  status: 'new' | 'confirmed' | 'courier' | 'delivered' | 'returned' | 'cancelled';
+  status: 'new' | 'hold' | 'confirmed' | 'courier' | 'delivered' | 'returned' | 'cancelled';
   utm_campaign: string | null; landing_slug?: string | null; utm_content: string | null; utm_source: string | null;
   consignment_id: string | null; tracking_code: string | null; courier_status: string | null;
   is_flagged: boolean; flag_reason: string | null;

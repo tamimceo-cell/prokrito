@@ -21,7 +21,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         */}
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2.5 sm:gap-x-4 sm:py-3">
           <Link href="/admin" className="order-1 font-display text-base font-extrabold sm:text-lg">
-            {site.name} <span className="text-brand">অ্যাডমিন</span>
+            {site.name} <span className="text-brand">Admin</span>
           </Link>
 
           <div className="order-2 ml-auto flex items-center gap-3 text-sm sm:order-3">

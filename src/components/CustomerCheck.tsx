@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { bn } from '@/lib/money';
+import { num } from '@/lib/money';
 import { RateBadge, type CourierStat } from './RateBadge';
 
 /**
@@ -22,17 +22,17 @@ export default function CustomerCheck() {
     }).catch(() => null);
     const j = await r?.json().catch(() => null);
     setBusy(false);
-    if (!j?.ok) { setErr(j?.error || 'দেখা যায়নি'); return; }
+    if (!j?.ok) { setErr(j?.error || 'Could not check'); return; }
     setRes(j);
   }
 
   return (
     <form onSubmit={check} className="flex flex-wrap items-center gap-2 rounded-xl2 border border-line bg-white p-3">
-      <b className="font-display text-sm">কাস্টমার চেক</b>
-      <input value={phone} onChange={(e) => setPhone(e.target.value)} inputMode="numeric" placeholder="০১XXXXXXXXX"
+      <b className="font-display text-sm">Customer check</b>
+      <input value={phone} onChange={(e) => setPhone(e.target.value)} inputMode="numeric" placeholder="01XXXXXXXXX"
         className="w-40 rounded-full border-2 border-line px-3 py-1.5 text-sm outline-none focus:border-brand" />
       <button disabled={busy || phone.length < 11} className="rounded-full bg-brand px-4 py-1.5 text-sm font-semibold text-white disabled:opacity-45">
-        {busy ? 'দেখা হচ্ছে…' : 'সাকসেস রেট দেখুন'}
+        {busy ? 'Checking…' : 'Check success rate'}
       </button>
       {err && <span className="text-sm text-warn">{err}</span>}
       {res && (
@@ -40,7 +40,7 @@ export default function CustomerCheck() {
           <RateBadge courier={res.pathao || undefined} own={res.own} />
           {!res.pathao && <span className="text-xs text-warn">Pathao: {res.pathaoError}</span>}
           <span className="text-xs text-ink-3">
-            আমাদের দোকানে {bn(res.own.orders)}টি অর্ডার · ডেলিভার্ড {bn(res.own.delivered)} · রিটার্ন {bn(res.own.returned)} · বাতিল {bn(res.own.cancelled)}
+            Our shop: {num(res.own.orders)} orders, {num(res.own.delivered)} delivered, {num(res.own.returned)} returned, {num(res.own.cancelled)} cancelled
           </span>
         </span>
       )}

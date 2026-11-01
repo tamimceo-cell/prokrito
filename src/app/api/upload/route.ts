@@ -24,18 +24,18 @@ const OK_TYPES = ['image/webp', 'image/jpeg', 'image/png'];
 
 export async function POST(req: Request) {
   const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ ok: false, error: 'অনুমতি নেই' }, { status: 401 });
+  if (!admin) return NextResponse.json({ ok: false, error: 'Not allowed' }, { status: 401 });
 
   let form: FormData;
   try { form = await req.formData(); }
-  catch { return NextResponse.json({ ok: false, error: 'ফাইল পড়া যায়নি।' }, { status: 400 }); }
+  catch { return NextResponse.json({ ok: false, error: 'Could not read the file.' }, { status: 400 }); }
 
   const files = form.getAll('file').filter((f): f is File => f instanceof File);
   if (!files.length) {
-    return NextResponse.json({ ok: false, error: 'কোনো ছবি পাওয়া যায়নি।' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'No image found.' }, { status: 400 });
   }
   if (files.length > 8) {
-    return NextResponse.json({ ok: false, error: 'একসাথে সর্বোচ্চ ৮টি ছবি।' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'Maximum 8 images at a time.' }, { status: 400 });
   }
 
   const db = getDb();
@@ -44,11 +44,11 @@ export async function POST(req: Request) {
   for (const file of files) {
     if (!OK_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { ok: false, error: 'শুধু ছবি আপলোড করা যাবে (JPG, PNG বা WebP)।' }, { status: 400 });
+        { ok: false, error: 'Only images can be uploaded (JPG, PNG or WebP).' }, { status: 400 });
     }
     if (file.size > MAX_BYTES) {
       return NextResponse.json(
-        { ok: false, error: 'ছবিটি অনেক বড়। ৪ MB-র কম হতে হবে।' }, { status: 400 });
+        { ok: false, error: 'Image is too large. It must be under 4 MB.' }, { status: 400 });
     }
 
     const ext = file.type === 'image/png' ? 'png' : file.type === 'image/jpeg' ? 'jpg' : 'webp';
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
       await fs.writeFile(path.join(dir, name), Buffer.from(await file.arrayBuffer()), { flag: 'wx' });
     } catch (e) {
       return NextResponse.json(
-        { ok: false, error: `আপলোড হয়নি: ${(e as Error).message}` }, { status: 500 });
+        { ok: false, error: `Upload failed: ${(e as Error).message}` }, { status: 500 });
     }
 
     urls.push(`${MEDIA_PREFIX}${BUCKET}/${name}`);
@@ -79,7 +79,7 @@ export async function POST(req: Request) {
 /** DELETE /api/upload?url=… — ছবি মুছে ফেলা */
 export async function DELETE(req: Request) {
   const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ ok: false, error: 'অনুমতি নেই' }, { status: 401 });
+  if (!admin) return NextResponse.json({ ok: false, error: 'Not allowed' }, { status: 401 });
 
   const url = new URL(req.url).searchParams.get('url') || '';
   const marker = `${MEDIA_PREFIX}${BUCKET}/`;
@@ -91,7 +91,7 @@ export async function DELETE(req: Request) {
 
   const name = decodeURIComponent(url.slice(i + marker.length).split('?')[0]);
   const full = mediaPath(`${BUCKET}/${path.basename(name)}`);
-  if (!full) return NextResponse.json({ ok: false, error: 'ভুল ঠিকানা' }, { status: 400 });
+  if (!full) return NextResponse.json({ ok: false, error: 'Invalid path' }, { status: 400 });
   // মুছে না ফেলে নাম বদলে রাখি — ভুল করে মুছলে ফেরত আনা যায়
   await fs.rename(full, full + '.deleted').catch(() => {});
 

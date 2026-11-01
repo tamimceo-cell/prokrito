@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   const now = Date.now();
   const recent = (fails.get(ip) || []).filter((t) => now - t < WINDOW);
   if (recent.length >= 8) {
-    return NextResponse.json({ ok: false, error: 'অনেকবার ভুল হয়েছে। ১০ মিনিট পরে চেষ্টা করুন।' }, { status: 429 });
+    return NextResponse.json({ ok: false, error: 'Too many failed attempts. Try again in 10 minutes.' }, { status: 429 });
   }
 
   let body: any = {};
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
   if (!ok) {
     recent.push(now); fails.set(ip, recent);
     if (fails.size > 5000) fails.clear();
-    return NextResponse.json({ ok: false, error: 'ইউজারনেম বা পাসওয়ার্ড মিলছে না।' }, { status: 401 });
+    return NextResponse.json({ ok: false, error: 'Wrong username or password.' }, { status: 401 });
   }
 
   fails.delete(ip);

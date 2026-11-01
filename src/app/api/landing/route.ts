@@ -16,19 +16,19 @@ export async function POST(req: Request) {
 
   const b = await req.json().catch(() => null);
   const l = b?.landing;
-  if (!l) return NextResponse.json({ ok: false, error: 'ভুল অনুরোধ' }, { status: 400 });
+  if (!l) return NextResponse.json({ ok: false, error: 'Invalid request' }, { status: 400 });
 
   const tiers = cleanTiers(l.tiers);
   const slug = String(l.slug || '').trim().toLowerCase();
   const thankyou = String(l.thankyou_slug || '').trim().toLowerCase() || null;
 
-  if (!SLUG.test(slug)) return NextResponse.json({ ok: false, error: 'লিংকে শুধু ইংরেজি ছোট হাতের অক্ষর, সংখ্যা ও - চলবে।' }, { status: 400 });
-  if (thankyou && !SLUG.test(thankyou)) return NextResponse.json({ ok: false, error: 'ধন্যবাদ পাতার লিংক ঠিক নেই।' }, { status: 400 });
-  if (!l.product_id) return NextResponse.json({ ok: false, error: 'প্রোডাক্ট বেছে নিন।' }, { status: 400 });
-  if (!tiers.length) return NextResponse.json({ ok: false, error: 'অন্তত একটা অফার (সংখ্যা + দাম) দিন।' }, { status: 400 });
+  if (!SLUG.test(slug)) return NextResponse.json({ ok: false, error: 'Link may only use lowercase English letters, numbers and -.' }, { status: 400 });
+  if (thankyou && !SLUG.test(thankyou)) return NextResponse.json({ ok: false, error: 'Thank-you page link is not valid.' }, { status: 400 });
+  if (!l.product_id) return NextResponse.json({ ok: false, error: 'Choose a product.' }, { status: 400 });
+  if (!tiers.length) return NextResponse.json({ ok: false, error: 'Add at least one offer (quantity + price).' }, { status: 400 });
 
   // ব্লকগুলো JSON হিসেবে আসে — তালিকা না হলে সেভ নয়, নইলে পাতা ভেঙে যাবে
-  if (!Array.isArray(l.blocks)) return NextResponse.json({ ok: false, error: 'পেইজের অংশগুলো ঠিক নেই।' }, { status: 400 });
+  if (!Array.isArray(l.blocks)) return NextResponse.json({ ok: false, error: 'Page blocks are not valid.' }, { status: 400 });
 
   const row = {
     slug, product_id: l.product_id, title: String(l.title || slug).trim(),
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     : await db.from('landing_pages').insert(row).select('id').single();
   if (error) {
     const dup = /duplicate|unique/i.test(error.message);
-    return NextResponse.json({ ok: false, error: dup ? 'এই লিংকে আগে থেকেই একটা পেইজ আছে।' : error.message }, { status: 400 });
+    return NextResponse.json({ ok: false, error: dup ? 'A page already exists at this link.' : error.message }, { status: 400 });
   }
 
   await db.from('audit_log').insert({

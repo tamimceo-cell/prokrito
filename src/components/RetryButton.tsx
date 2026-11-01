@@ -13,15 +13,15 @@ export default function RetryButton() {
       {msg && <span className="text-sm text-ink-2">{msg}</span>}
       <button disabled={busy}
         onClick={async () => {
-          setBusy(true); setMsg('পাঠানো হচ্ছে…');
+          setBusy(true); setMsg('Sending…');
           const r = await fetch('/api/events/retry', { method: 'POST', body: '{}' });
           const j = await r.json();
-          setMsg(`${j.sent}/${j.tried} সফল`);
+          setMsg(`${j.sent}/${j.tried} sent`);
           setBusy(false);
           start(() => router.refresh());
         }}
         className="rounded-full bg-brand px-5 py-2 text-sm font-bold text-white disabled:opacity-50">
-        ব্যর্থগুলো আবার পাঠান
+        Resend failed events
       </button>
     </div>
   );

@@ -19,9 +19,9 @@ export default async function LandingAdmin() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="font-display text-2xl font-extrabold">ল্যান্ডিং পেইজ</h1>
+        <h1 className="font-display text-2xl font-extrabold">Landing pages</h1>
         <p className="text-sm text-ink-3">
-          এড যে লিংকে চলছে সেটা বদলাবেন না। দাম বা অফার বদলে সেভ করলে কয়েক সেকেন্ডে সাইটে দেখা যাবে।
+          Don't change the link an ad is running on. Price or offer changes show on the site within seconds of saving.
         </p>
       </div>
       <LandingManager initial={(pages || []) as any[]} products={(products || []) as any[]} counts={counts} />

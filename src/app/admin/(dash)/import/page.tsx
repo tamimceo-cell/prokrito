@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { requireAdmin } from '@/lib/auth';
 import { sql } from '@/lib/db';
-import { bn } from '@/lib/money';
+import { num } from '@/lib/money';
 import ImportButtons from '@/components/ImportButtons';
 
 export const dynamic = 'force-dynamic';
@@ -17,15 +17,14 @@ export default async function ImportPage() {
   ]);
   return (
     <div className="mx-auto max-w-2xl space-y-5">
-      <h1 className="font-display text-2xl font-extrabold">পুরনো সাইট থেকে আনা</h1>
+      <h1 className="font-display text-2xl font-extrabold">Import from the old site</h1>
       <p className="text-sm text-ink-2">
-        এখন আছে: {bn(Number(p.n))}টি প্রোডাক্ট · {bn(Number(l.n))}টি ল্যান্ডিং পেইজ · {bn(Number(o.n))}টি অর্ডার
-        {o.mx ? <> (শেষ অর্ডার #{bn(Number(o.mx))})</> : null}
+        Currently: {num(p.n)} products, {num(l.n)} landing pages, {num(o.n)} orders
+        {o.mx ? <> (last order #{Number(o.mx)})</> : null}
       </p>
       <ImportButtons />
       <p className="text-xs text-ink-3">
-        দুবার চাপলেও সমস্যা নেই — যে অর্ডার আগেই আছে সেটা আবার আসে না। ডোমেইন বদলের রাতে
-        WordPress থেকে নতুন করে ফাইল বানিয়ে আরেকবার "অর্ডার আনুন" চাপলে মাঝের অর্ডারগুলোও চলে আসবে।
+        Safe to run twice — orders that already exist are skipped.
       </p>
     </div>
   );

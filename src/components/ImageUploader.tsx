@@ -53,19 +53,19 @@ export default function ImageUploader({
 
   async function handleFiles(list: FileList | File[]) {
     const files = [...list].filter((f) => f.type.startsWith('image/'));
-    if (!files.length) { setMsg('শুধু ছবি ফাইল দিন।'); return; }
-    if (images.length + files.length > 8) { setMsg('একটি প্রোডাক্টে সর্বোচ্চ ৮টি ছবি।'); return; }
+    if (!files.length) { setMsg('Only image files, please.'); return; }
+    if (images.length + files.length > 8) { setMsg('Maximum 8 images per product.'); return; }
 
-    setBusy(true); setMsg('ছবি ছোট করা হচ্ছে…');
+    setBusy(true); setMsg('Resizing images…');
     let fd: FormData;
     try {
       const small = await Promise.all(files.map(shrink));
       const totalKb = Math.round(small.reduce((a, f) => a + f.size, 0) / 1024);
-      setMsg(`আপলোড হচ্ছে… (${totalKb} KB)`);
+      setMsg(`Uploading… (${totalKb} KB)`);
       fd = new FormData();
       for (const f of small) fd.append('file', f);
     } catch {
-      setBusy(false); setMsg('ছবিটি পড়া যায়নি। অন্য ছবি দিয়ে দেখুন।');
+      setBusy(false); setMsg('Could not read the image. Try another one.');
       return;
     }
 
@@ -73,13 +73,13 @@ export default function ImageUploader({
       const res = await fetch('/api/upload', { method: 'POST', body: fd });
       const j = await res.json().catch(() => null);
       setBusy(false);
-      if (!j?.ok) { setMsg(j?.error || 'আপলোড হয়নি।'); return; }
+      if (!j?.ok) { setMsg(j?.error || 'Upload failed.'); return; }
       onChange([...images, ...j.urls]);
-      setMsg(`${j.urls.length}টি ছবি যোগ হয়েছে।`);
+      setMsg(`${j.urls.length} image(s) added.`);
       setTimeout(() => setMsg(''), 2500);
     } catch {
       setBusy(false);
-      setMsg('ইন্টারনেট সংযোগে সমস্যা। আবার চেষ্টা করুন।');
+      setMsg('Connection problem. Please try again.');
     }
     if (input.current) input.current.value = '';
   }
@@ -109,9 +109,9 @@ export default function ImageUploader({
         className={`cursor-pointer rounded-xl2 border-2 border-dashed p-5 text-center transition ${
           drag ? 'border-brand bg-brand-soft' : 'border-line bg-cream hover:border-brand'}`}>
         <p className="text-3xl">🖼️</p>
-        <p className="mt-1 font-display font-bold">ছবি যোগ করুন</p>
+        <p className="mt-1 font-display font-bold">Add images</p>
         <p className="mt-0.5 text-xs text-ink-3">
-          ছবিতে ক্লিক করে বাছুন, অথবা এখানে টেনে ছাড়ুন · সর্বোচ্চ ৮টি
+          Click to choose, or drag and drop here (up to 8)
         </p>
         <input ref={input} type="file" accept="image/*" multiple hidden
           onChange={(e) => e.target.files && handleFiles(e.target.files)} />
@@ -132,16 +132,16 @@ export default function ImageUploader({
               </div>
               {i === 0 && (
                 <span className="absolute left-1 top-1 rounded bg-brand px-1.5 py-0.5 text-[10px] font-bold text-white">
-                  প্রধান
+                  Main
                 </span>
               )}
               <div className="flex items-center justify-between border-t border-line bg-cream px-1 py-0.5">
                 <button type="button" onClick={() => move(i, -1)} disabled={i === 0}
-                  aria-label="আগে সরান" className="px-1.5 text-sm disabled:opacity-25">←</button>
+                  aria-label="Move left" className="px-1.5 text-sm disabled:opacity-25">←</button>
                 <button type="button" onClick={() => removeAt(i)}
-                  aria-label="মুছুন" className="px-1.5 text-sm text-pinkc">✕</button>
+                  aria-label="Remove" className="px-1.5 text-sm text-pinkc">✕</button>
                 <button type="button" onClick={() => move(i, 1)} disabled={i === images.length - 1}
-                  aria-label="পরে সরান" className="px-1.5 text-sm disabled:opacity-25">→</button>
+                  aria-label="Move right" className="px-1.5 text-sm disabled:opacity-25">→</button>
               </div>
             </div>
           ))}
@@ -150,7 +150,7 @@ export default function ImageUploader({
 
       {!!images.length && (
         <p className="mt-1.5 text-[11px] text-ink-3">
-          প্রথম ছবিটাই প্রোডাক্টের প্রধান ছবি — ← → দিয়ে ক্রম বদলাতে পারেন।
+          The first image is the main product image. Use ← → to reorder.
         </p>
       )}
     </div>

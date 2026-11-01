@@ -4,12 +4,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const NAV = [
-  { href: '/admin',          label: 'ড্যাশবোর্ড' },
-  { href: '/admin/orders',   label: 'অর্ডার' },
-  { href: '/admin/products', label: 'প্রোডাক্ট' },
-  { href: '/admin/landing',  label: 'ল্যান্ডিং পেইজ' },
-  { href: '/admin/events',   label: 'পিক্সেল ইভেন্ট' },
-  { href: '/admin/import',   label: 'পুরনো ডাটা' },
+  { href: '/admin',          label: 'Dashboard' },
+  { href: '/admin/orders',   label: 'Orders' },
+  { href: '/admin/products', label: 'Products' },
+  { href: '/admin/landing',  label: 'Landing pages' },
+  { href: '/admin/events',   label: 'Pixel events' },
+  { href: '/admin/import',   label: 'Old site data' },
 ];
 
 export default function AdminNav() {

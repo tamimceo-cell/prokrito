@@ -4,7 +4,6 @@
  * আলাদা ফাইলে রাখা হয়েছে কারণ এটাই একমাত্র জায়গা যেখানে স্টকের ঘর
  * *মুছে* যায় — তাই এটুকু আলাদা করে পরীক্ষা করা যায়।
  */
-import { bn } from './money';
 import { site } from '@/config/site';
 
 /** সুপাবেস ক্লায়েন্টের যে টুকুটা এখানে লাগে (পরীক্ষায় নকল বসানো যায়) */
@@ -80,7 +79,7 @@ export async function syncVariants(db: VariantDb, productId: string, sizesIn: Ax
   if (gone.length) await db.from('product_variants').delete().in('id', gone);
 
   const bits = [];
-  if (fresh.length) bits.push(`${bn(fresh.length)}টি নতুন ঘর`);
-  if (gone.length) bits.push(`${bn(gone.length)}টি বাদ`);
+  if (fresh.length) bits.push(`${fresh.length} new stock slot(s)`);
+  if (gone.length) bits.push(`${gone.length} removed`);
   return bits.join(', ');
 }

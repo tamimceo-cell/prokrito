@@ -16,17 +16,17 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ ok: false, error: 'অনুমতি নেই' }, { status: 401 });
+  if (!admin) return NextResponse.json({ ok: false, error: 'Not allowed' }, { status: 401 });
 
   const { id, restock } = await req.json().catch(() => ({}));
-  if (!id) return NextResponse.json({ ok: false, error: 'ভুল অনুরোধ' }, { status: 400 });
+  if (!id) return NextResponse.json({ ok: false, error: 'Invalid request' }, { status: 400 });
 
   const db = getDb();
 
   const { data: order, error: readErr } = await db
     .from('orders').select('id, order_no, name, phone, total, status').eq('id', id).single();
   if (readErr || !order) {
-    return NextResponse.json({ ok: false, error: 'অর্ডার পাওয়া যায়নি' }, { status: 404 });
+    return NextResponse.json({ ok: false, error: 'Order not found' }, { status: 404 });
   }
 
   // চাইলে স্টক ফেরত — যা কমানো হয়েছিল, ঠিক ততটাই

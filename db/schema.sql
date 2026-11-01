@@ -89,7 +89,8 @@ CREATE TABLE IF NOT EXISTS orders (
   subtotal      INT          NOT NULL,
   shipping      INT          NOT NULL,
   total         INT          NOT NULL,
-  status        ENUM('new','confirmed','courier','delivered','returned','cancelled') NOT NULL DEFAULT 'new',
+  -- hold — কাস্টমার পরে নিতে বলেছে/ফোন ধরেনি; কুরিয়ারে পাঠানো যায় না (নভেম্বর ২০২৬)
+  status        ENUM('new','hold','confirmed','courier','delivered','returned','cancelled') NOT NULL DEFAULT 'new',
   status_note   TEXT         NULL,
   -- অ্যাট্রিবিউশন (CAPI-র জন্য জরুরি)
   fbp           VARCHAR(255) NULL,

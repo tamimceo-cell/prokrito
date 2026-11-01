@@ -19,7 +19,7 @@ export async function POST(req: Request) {
   const cron = req.headers.get('x-cron-secret');
   const okCron = !!process.env.REVALIDATE_SECRET && cron === process.env.REVALIDATE_SECRET;
   if (!okCron && !(await requireAdmin())) return NextResponse.json({ ok: false }, { status: 401 });
-  if (!pathaoConfigured()) return NextResponse.json({ ok: false, error: 'Pathao-র কি বসানো নেই' }, { status: 400 });
+  if (!pathaoConfigured()) return NextResponse.json({ ok: false, error: 'Pathao API keys are not set' }, { status: 400 });
 
   const db = getDb();
   const { data: orders } = await db.from('orders')

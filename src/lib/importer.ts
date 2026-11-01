@@ -21,7 +21,7 @@ import { cleanExtraFields, cleanTiers } from './landing';
 
 function importDir(): string {
   const d = process.env.IMPORT_DIR;
-  if (!d) throw new Error('IMPORT_DIR সেট করা নেই');
+  if (!d) throw new Error('IMPORT_DIR is not set');
   return path.resolve(d);
 }
 
@@ -100,7 +100,7 @@ const STATUS: Record<string, string> = {
 export async function importOrders(): Promise<{ read: number; added: number; skipped: number }> {
   const dir = importDir();
   const files = (await fs.readdir(dir)).filter((f) => /^orders.*\.ndjson$/.test(f)).sort();
-  if (!files.length) throw new Error('orders*.ndjson ফাইল পাওয়া যায়নি');
+  if (!files.length) throw new Error('No orders*.ndjson file found');
 
   // প্রোডাক্ট চেনা হয় পুরনো আইডি (content_id) দিয়ে
   const prods = await sql<{ id: string; code: string; content_id: string | null }>('SELECT id, code, content_id FROM products');

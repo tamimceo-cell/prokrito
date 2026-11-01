@@ -14,7 +14,7 @@ export const maxDuration = 300;
 
 export async function POST(req: Request) {
   const admin = await requireAdmin();
-  if (!admin || admin.role !== 'owner') return NextResponse.json({ ok: false, error: 'শুধু মালিক পারবেন' }, { status: 403 });
+  if (!admin || admin.role !== 'owner') return NextResponse.json({ ok: false, error: 'Owner only' }, { status: 403 });
   const { what } = await req.json().catch(() => ({}));
   try {
     const result = what === 'orders' ? await importOrders() : await importCatalog();

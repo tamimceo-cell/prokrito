@@ -1,7 +1,6 @@
 import { getDb } from '@/lib/db';
 import ProductManager from '@/components/ProductManager';
 import type { Product } from '@/lib/types';
-import { site } from '@/config/site';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,9 +19,9 @@ export default async function ProductsPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="font-display text-2xl font-extrabold">প্রোডাক্ট</h1>
+        <h1 className="font-display text-2xl font-extrabold">Products</h1>
         <p className="text-sm text-ink-3">
-          নতুন {site.words.item} যোগ করুন, দাম বা স্টক বদলান — সেভ করলেই সাইটে দেখা যাবে
+          Add products, change prices or stock — changes show on the site as soon as you save
         </p>
       </div>
       <ProductManager initial={products} />

@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   if (!(await requireAdmin())) return NextResponse.json({ ok: false }, { status: 401 });
   const b = await req.json().catch(() => ({}));
   const intl = normalizeBdPhone(String(b.phone || ''));
-  if (!intl) return NextResponse.json({ ok: false, error: 'সঠিক ১১ ডিজিটের নম্বর দিন' }, { status: 400 });
+  if (!intl) return NextResponse.json({ ok: false, error: 'Enter a valid 11-digit number' }, { status: 400 });
 
   const [pathao, own] = await Promise.all([
     refreshCustomerRate(intl, !!b.force),
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
   return NextResponse.json({
     ok: true,
     pathao,
-    pathaoError: pathao ? null : cached?.error || 'পাওয়া যায়নি',
+    pathaoError: pathao ? null : cached?.error || 'Not found',
     own: {
       orders: rows.length,
       delivered: rows.filter((r) => r.status === 'delivered').length,

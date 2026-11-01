@@ -1,11 +1,10 @@
-import { bn } from '@/lib/money';
 
 export interface CourierStat { total: number; success: number; rating: string | null; error?: string | null }
 export interface OwnStat { orders: number; delivered: number; returned: number }
 
 const RATING: Record<string, string> = {
-  excellent_customer: 'চমৎকার', good_customer: 'ভালো', moderate_customer: 'মাঝারি',
-  risky_customer: 'ঝুঁকিপূর্ণ', new_customer: 'নতুন',
+  excellent_customer: 'Excellent', good_customer: 'Good', moderate_customer: 'Moderate',
+  risky_customer: 'Risky', new_customer: 'New',
 };
 
 /** ৮০%+ সবুজ, ৫০-৮০ হলুদ, তার নিচে লাল — অর্ডার কনফার্মের আগে এক নজরে */
@@ -26,17 +25,17 @@ export function RateBadge({ courier, own }: { courier?: CourierStat; own?: OwnSt
     <div className="mt-1 flex flex-wrap gap-1 text-[11px] font-semibold">
       {hasCourier ? (
         <span className={`rounded-full px-2 py-0.5 tabular-nums ${rateTone(pct!)}`}
-          title={`Pathao: ${courier!.total}টি পার্সেলের ${courier!.success}টি ডেলিভার্ড`}>
-          Pathao {bn(pct!)}% ({bn(courier!.success)}/{bn(courier!.total)})
+          title={`Pathao: ${courier!.success} of ${courier!.total} parcels delivered`}>
+          Pathao {pct}% ({courier!.success}/{courier!.total})
           {courier!.rating && RATING[courier!.rating] ? ` · ${RATING[courier!.rating]}` : ''}
         </span>
       ) : courier && !courier.error ? (
-        <span className="rounded-full bg-sunk px-2 py-0.5 text-ink-3">Pathao-তে নতুন</span>
+        <span className="rounded-full bg-sunk px-2 py-0.5 text-ink-3">New on Pathao</span>
       ) : null}
       {settled > 0 && (
         <span className={`rounded-full px-2 py-0.5 tabular-nums ${rateTone((own!.delivered / settled) * 100)}`}
-          title="আমাদের দোকানে এই নম্বরের আগের অর্ডার">
-          এখানে {bn(own!.delivered)}/{bn(settled)}
+          title="Past orders from this number in our shop">
+          Here {own!.delivered}/{settled}
         </span>
       )}
     </div>

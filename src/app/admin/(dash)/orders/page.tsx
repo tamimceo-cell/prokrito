@@ -41,21 +41,21 @@ export default async function OrdersPage({
     const x = (own[h.phone] ||= { orders: 0, delivered: 0, returned: 0 });
     x.orders++; if (h.status === 'delivered') x.delivered++; if (h.status === 'returned') x.returned++;
   }
-  const tabs = ['all', 'new', 'confirmed', 'courier', 'delivered', 'returned', 'cancelled'];
+  const tabs = ['all', 'new', 'hold', 'confirmed', 'courier', 'delivered', 'returned', 'cancelled'];
   const active = sp.status || 'all';
 
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-extrabold">অর্ডার</h1>
-          <p className="text-sm text-ink-3">সর্বশেষ ২০০টি অর্ডার</p>
+          <h1 className="font-display text-2xl font-extrabold">Orders</h1>
+          <p className="text-sm text-ink-3">Latest 200 orders</p>
         </div>
         <form className="flex gap-2">
           {sp.status && <input type="hidden" name="status" value={sp.status} />}
-          <input name="q" defaultValue={sp.q || ''} placeholder="নাম বা ফোন…"
+          <input name="q" defaultValue={sp.q || ''} placeholder="Name or phone…"
             className="rounded-full border-2 border-line bg-white px-4 py-2 text-sm outline-none focus:border-brand" />
-          <button className="rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white">খুঁজুন</button>
+          <button className="rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white">Search</button>
         </form>
       </div>
 
@@ -64,7 +64,7 @@ export default async function OrdersPage({
           <Link key={t} href={`/admin/orders${t === 'all' ? '' : `?status=${t}`}`}
             className={`whitespace-nowrap rounded-full border-2 px-4 py-1.5 text-sm font-semibold ${
               active === t ? 'border-brand bg-brand text-white' : 'border-line bg-white text-ink-2'}`}>
-            {t === 'all' ? 'সব' : STATUS_LABEL[t]}
+            {t === 'all' ? 'All' : STATUS_LABEL[t]}
           </Link>
         ))}
       </div>

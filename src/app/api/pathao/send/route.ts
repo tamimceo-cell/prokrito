@@ -9,14 +9,14 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ ok: false, error: 'অনুমতি নেই' }, { status: 401 });
+  if (!admin) return NextResponse.json({ ok: false, error: 'Not allowed' }, { status: 401 });
   if (!pathaoConfigured()) {
-    return NextResponse.json({ ok: false, error: 'Pathao-র কি Hostinger-এ বসানো নেই।' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'Pathao API keys are not set in Hostinger.' }, { status: 400 });
   }
 
   const { ids } = await req.json().catch(() => ({ ids: [] }));
   if (!Array.isArray(ids) || !ids.length) {
-    return NextResponse.json({ ok: false, error: 'কোনো অর্ডার বাছাই করা হয়নি' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'No orders selected' }, { status: 400 });
   }
 
   const db = getDb();
@@ -26,9 +26,9 @@ export async function POST(req: Request) {
     .in('id', ids);
 
   // বাতিল বা আগে পাঠানো অর্ডার আবার যাবে না
-  const pending = (orders || []).filter((o) => !o.consignment_id && !['cancelled', 'delivered', 'returned'].includes(o.status));
+  const pending = (orders || []).filter((o) => !o.consignment_id && !['cancelled', 'delivered', 'returned', 'hold'].includes(o.status));
   if (!pending.length) {
-    return NextResponse.json({ ok: false, error: 'বাছাই করা অর্ডারগুলো আগেই পাঠানো বা বাতিল' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'The selected orders are already sent, on hold or cancelled' }, { status: 400 });
   }
 
   /*

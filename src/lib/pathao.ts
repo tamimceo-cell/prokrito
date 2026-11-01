@@ -53,12 +53,12 @@ async function issue(body: Record<string, unknown>) {
     signal: AbortSignal.timeout(15000),
   });
   const j: any = await res.json().catch(() => null);
-  if (!res.ok || !j?.access_token) throw new Error(j?.message || `Pathao লগইন হয়নি (${res.status})`);
+  if (!res.ok || !j?.access_token) throw new Error(j?.message || `Pathao login failed (${res.status})`);
   return { access: j.access_token, refresh: j.refresh_token, exp: Date.now() + (Number(j.expires_in) || 3600) * 1000 - 3600_000 } as Tok;
 }
 
 async function apiToken(force = false): Promise<string> {
-  if (!pathaoConfigured()) throw new Error('Pathao-র কি Hostinger-এ বসানো নেই');
+  if (!pathaoConfigured()) throw new Error('Pathao API keys are not set in Hostinger');
   const key = 'pathao_token';
   const cur = force ? undefined : await loadTok(key);
   if (cur && cur.exp > Date.now()) return cur.access;
@@ -81,7 +81,7 @@ async function call(path: string, init: RequestInit = {}, retried = false): Prom
   if (!res.ok) {
     // Pathao ভুল ঘরের বিবরণ errors-এ দেয় — সেটাই দেখাই, নইলে বোঝা যায় না কী ভুল
     const detail = j?.errors ? Object.values(j.errors).flat().join(' · ') : '';
-    throw new Error([j?.message || `Pathao ত্রুটি (${res.status})`, detail].filter(Boolean).join(' — '));
+    throw new Error([j?.message || `Pathao error (${res.status})`, detail].filter(Boolean).join(' — '));
   }
   return j;
 }
@@ -176,14 +176,14 @@ async function panelToken(force = false): Promise<string> {
   });
   const j: any = await res.json().catch(() => null);
   const access = j?.access_token || j?.data?.access_token || j?.token || j?.data?.token;
-  if (!res.ok || !access) throw new Error(j?.message || `Pathao প্যানেল লগইন হয়নি (${res.status})`);
+  if (!res.ok || !access) throw new Error(j?.message || `Pathao panel login failed (${res.status})`);
   const t: Tok = { access, exp: Date.now() + (Number(j?.expires_in || j?.data?.expires_in) || 86400) * 1000 - 3600_000 };
   await saveTok(key, t);
   return t.access;
 }
 
 export async function pathaoCustomerRate(phone: string, retried = false): Promise<CustomerRate> {
-  if (!process.env.PATHAO_USERNAME || !process.env.PATHAO_PASSWORD) throw new Error('Pathao লগইন env-এ নেই');
+  if (!process.env.PATHAO_USERNAME || !process.env.PATHAO_PASSWORD) throw new Error('Pathao login is not set in env');
   const tok = await panelToken(retried);
   const res = await fetch(`${PANEL}/api/v1/user/success`, {
     method: 'POST',
@@ -193,7 +193,7 @@ export async function pathaoCustomerRate(phone: string, retried = false): Promis
   });
   if (res.status === 401 && !retried) return pathaoCustomerRate(phone, true);
   const j: any = await res.json().catch(() => null);
-  if (!res.ok || !j?.data) throw new Error(j?.message || `সাকসেস রেট পাওয়া যায়নি (${res.status})`);
+  if (!res.ok || !j?.data) throw new Error(j?.message || `Could not get success rate (${res.status})`);
   return {
     total: Number(j.data.customer?.total_delivery) || 0,
     success: Number(j.data.customer?.successful_delivery) || 0,
@@ -233,6 +233,6 @@ export async function refreshCustomerRate(phone: string, force = false): Promise
 
 /** Pathao-র রেটিং → বাংলা */
 export const RATING_LABEL: Record<string, string> = {
-  excellent_customer: 'চমৎকার', good_customer: 'ভালো', moderate_customer: 'মাঝারি',
-  risky_customer: 'ঝুঁকিপূর্ণ', new_customer: 'নতুন',
+  excellent_customer: 'Excellent', good_customer: 'Good', moderate_customer: 'Moderate',
+  risky_customer: 'Risky', new_customer: 'New',
 };

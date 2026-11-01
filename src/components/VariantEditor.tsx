@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { bn } from '@/lib/money';
 import { site } from '@/config/site';
 import { axisKey, type Axis } from '@/lib/variants';
 
@@ -75,18 +74,18 @@ export default function VariantEditor({
     <div className="rounded-xl2 border-2 border-line bg-cream p-3.5">
       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
         <span className="font-display text-sm font-bold">
-          {site.words.optionAxis} ও {site.words.colorAxis}
+          Sizes and colours
         </span>
         <span className="text-[11px] text-ink-3">
-          স্টকের ঘর হবে {bn(combos)}টি
+          {combos} stock slot{combos === 1 ? '' : 's'}
           {sizes.length > 0 && colors.length > 0 &&
-            ` (${bn(sizes.length)} × ${bn(colors.length)})`}
+            ` (${sizes.length} × ${colors.length})`}
         </span>
       </div>
 
       {/* ---- সাইজ ---- */}
       <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-3">
-        {site.words.optionAxis}
+        Sizes
       </p>
       <div className="mb-2 flex flex-wrap gap-1.5">
         {sizes.map((s) => (
@@ -95,7 +94,7 @@ export default function VariantEditor({
         ))}
         {!sizes.length && (
           <span className="text-xs text-ink-3">
-            কিছু না দিলে এই পণ্যের {site.words.optionAxis} থাকবে না — একটাই স্টকের ঘর।
+            Leave empty if this product has no sizes — it gets a single stock slot.
           </span>
         )}
       </div>
@@ -104,24 +103,24 @@ export default function VariantEditor({
           value={sizeText}
           onChange={(e) => setSizeText(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addSize(); } }}
-          placeholder={`${site.words.optionAxis} লিখে Enter — যেমন ৩৬`}
+          placeholder="Type a size and press Enter — e.g. 36"
           className="min-w-0 flex-1 rounded-lg border-2 border-line bg-white px-3 py-1.5 text-sm outline-none focus:border-brand" />
         <button type="button" onClick={addSize}
           className="shrink-0 rounded-lg border-2 border-line bg-white px-3 text-sm font-bold text-brand hover:border-brand">
-          যোগ
+          Add
         </button>
       </div>
       {!!site.options.values.length && !sizes.length && (
         <button type="button"
           onClick={() => onChange({ sizes: site.options.values.map((v) => ({ key: v.key, label: v.label })), colors })}
           className="mb-4 -mt-2 block text-[11px] font-semibold text-brand underline">
-          চেনা {site.words.optionAxis}গুলো বসিয়ে দিন ({site.options.values.map((v) => v.label).join(', ')})
+          Add the usual sizes ({site.options.values.map((v) => v.label).join(', ')})
         </button>
       )}
 
       {/* ---- রঙ ---- */}
       <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-3">
-        {site.words.colorAxis}
+        Colours
       </p>
       <div className="mb-2 flex flex-wrap gap-1.5">
         {colors.map((c) => (
@@ -130,30 +129,30 @@ export default function VariantEditor({
         ))}
         {!colors.length && (
           <span className="text-xs text-ink-3">
-            কিছু না দিলে প্রোডাক্ট পেইজে {site.words.colorAxis} বাছার ঘরটাই দেখাবে না।
+            Leave empty and the product page won't show a colour picker.
           </span>
         )}
       </div>
       <div className="flex gap-1.5">
         {/* input[type=color] — ব্রাউজারের নিজের কালার পিকার */}
         <input type="color" value={colorHex} onChange={(e) => setColorHex(e.target.value)}
-          aria-label={`${site.words.colorAxis} বাছুন`}
+          aria-label="Pick colour"
           className="h-9 w-10 shrink-0 cursor-pointer rounded-lg border-2 border-line bg-white p-0.5" />
         <input
           value={colorText}
           onChange={(e) => setColorText(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addColor(colorText, colorHex); } }}
-          placeholder={`${site.words.colorAxis}ের নাম লিখে Enter — যেমন লাল`}
+          placeholder="Type a colour name and press Enter — e.g. Red"
           className="min-w-0 flex-1 rounded-lg border-2 border-line bg-white px-3 py-1.5 text-sm outline-none focus:border-brand" />
         <button type="button" onClick={() => addColor(colorText, colorHex)}
           className="shrink-0 rounded-lg border-2 border-line bg-white px-3 text-sm font-bold text-brand hover:border-brand">
-          যোগ
+          Add
         </button>
       </div>
 
       {!!unusedSuggestions.length && (
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
-          <span className="text-[11px] text-ink-3">চাপলেই যোগ হবে:</span>
+          <span className="text-[11px] text-ink-3">Tap to add:</span>
           {unusedSuggestions.map((c) => (
             <button key={c.key} type="button" onClick={() => addColor(c.label, c.hex)}
               className="flex items-center gap-1 rounded-full border border-line bg-white px-2 py-0.5 text-[11px] font-semibold hover:border-brand">
@@ -168,18 +167,16 @@ export default function VariantEditor({
         <p className="mt-3 rounded-lg border-2 border-warn/40 bg-white p-2 text-[11px] leading-relaxed text-warn">
           {/* {' '} লাগছে কারণ লেখার পর নতুন লাইনে {expression} বসলে JSX
               মাঝের ফাঁকাটা মুছে দেয় — "আছেরঙহীন" হয়ে যাচ্ছিল */}
-          <b>খেয়াল করুন:</b> এই পণ্যে এখন {site.words.colorAxis} নেই, তাই স্টক আছে{' '}
-          {site.words.colorAxis}হীন ঘরে। {site.words.colorAxis} যোগ করলে ওই ঘরগুলো
-          মুছে গিয়ে নতুন জোড়াগুলো ০ থেকে শুরু হবে — সেভ করার পর স্টকের সংখ্যাগুলো
-          আবার বসিয়ে নিতে হবে।
+          <b>Note:</b> this product has no colours yet, so its stock sits in colourless slots.
+          Adding colours removes those slots and the new size-colour pairs start at 0 — set the
+          stock numbers again after saving.
         </p>
       )}
 
       {!isNew && !firstColor && changed && (
         <p className="mt-3 rounded-lg bg-white p-2 text-[11px] leading-relaxed text-ink-3">
-          সেভ করলে নতুন জোড়াগুলো ০ স্টক নিয়ে যোগ হবে, আর তালিকা থেকে বাদ দেওয়া
-          ঘরগুলো তাদের স্টকসহ মুছে যাবে। শুধু নাম বদলালে স্টকে হাত পড়ে না, আর
-          পুরনো অর্ডারে কোনো অবস্থাতেই কিছু বদলায় না।
+          On save, new pairs are added with 0 stock and removed slots are deleted along with their
+          stock. Renaming keeps the stock, and past orders never change.
         </p>
       )}
     </div>
@@ -191,7 +188,7 @@ function Chip({ label, hex, onRemove }: { label: string; hex?: string; onRemove:
     <span className="inline-flex items-center gap-1.5 rounded-full border-2 border-line bg-white py-1 pl-2.5 pr-1 text-sm font-semibold">
       {hex && <span style={{ background: hex }} className="h-3.5 w-3.5 rounded-full border border-line" />}
       {label}
-      <button type="button" onClick={onRemove} aria-label={`${label} বাদ দিন`}
+      <button type="button" onClick={onRemove} aria-label={`Remove ${label}`}
         className="grid h-5 w-5 place-items-center rounded-full text-ink-3 hover:bg-sunk hover:text-pinkc">
         ×
       </button>
