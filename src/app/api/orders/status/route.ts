@@ -6,6 +6,27 @@ import { requireAdmin } from '@/lib/auth';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
+/*
+ * 'hold' পরে যোগ হয়েছে (নভেম্বর ২০২৬)। লাইভ ডাটাবেসের ENUM-এ না থাকলে
+ * Hostinger-এর MySQL ভুল দেয় না, চুপচাপ ফাঁকা ('') বসিয়ে দেয় — প্রথম
+ * হোল্ডে ঠিক তাই হয়েছিল (#19826)। তাই অবস্থা বদলানোর আগে একবার দেখে
+ * নিই তালিকায় 'hold' আছে কিনা; না থাকলে যোগ করি। শুধু যোগ, আগের কিছু
+ * বদলায় না। ফাঁকা অবস্থার অর্ডার (ওই ঘটনার) 'new'-এ ফেরত।
+ * প্রতি সার্ভার-চালুতে একবারই চলে।
+ */
+let holdReady = false;
+async function ensureHoldStatus() {
+  if (holdReady) return;
+  const [col] = await sql<{ t: string }>(
+    `SELECT COLUMN_TYPE t FROM information_schema.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'orders' AND COLUMN_NAME = 'status'`);
+  if (!String(col?.t || '').includes("'hold'")) {
+    await sql(`ALTER TABLE orders MODIFY status ENUM('new','hold','confirmed','courier','delivered','returned','cancelled') NOT NULL DEFAULT 'new'`);
+  }
+  await sql(`UPDATE orders SET status = 'new' WHERE status = ''`);
+  holdReady = true;
+}
+
 const OK = ['new', 'hold', 'confirmed', 'courier', 'delivered', 'returned', 'cancelled'];
 
 export async function POST(req: Request) {
@@ -22,17 +43,8 @@ export async function POST(req: Request) {
   if (typeof note === 'string') patch.status_note = note;
   if (status === 'delivered') patch.delivered_at = new Date().toISOString();
 
-  let { error } = await db.from('orders').update(patch).eq('id', id);
-  /*
-   * 'hold' পরে যোগ হয়েছে (নভেম্বর ২০২৬)। লাইভ ডাটাবেসের তালিকায় না থাকলে
-   * MySQL "Data truncated" দেয় — তখন একবার তালিকাটা বাড়িয়ে আবার চেষ্টা।
-   * শুধু যোগ করা হয়, আগের কোনো অবস্থা বা অর্ডার বদলায় না; দ্বিতীয়বার
-   * আর দরকার পড়ে না। phpMyAdmin-এ হাতে চালানো লাগে না।
-   */
-  if (error && status === 'hold' && /truncated|incorrect|enum/i.test(error.message)) {
-    await sql(`ALTER TABLE orders MODIFY status ENUM('new','hold','confirmed','courier','delivered','returned','cancelled') NOT NULL DEFAULT 'new'`);
-    ({ error } = await db.from('orders').update(patch).eq('id', id));
-  }
+  await ensureHoldStatus();
+  const { error } = await db.from('orders').update(patch).eq('id', id);
   if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
 
   await db.from('audit_log').insert({
